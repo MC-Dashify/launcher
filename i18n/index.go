@@ -5,7 +5,7 @@ import (
 
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/utils/logger"
-	"github.com/Xuanwo/go-locale"
+	"github.com/jeandeaual/go-locale"
 )
 
 func Get(key string) string {
@@ -13,11 +13,12 @@ func Get(key string) string {
 	if global.IsLanguageForced {
 		language = global.ForcedLanguage
 	} else {
-		tag, err := locale.Detect()
+		tag, err := locale.GetLocale()
+
 		if err != nil {
 			logger.Fatal(fmt.Sprintf("Failed to detect locale: %v", err.Error()))
 		}
-		language = tag.String()
+		language = tag
 	}
 
 	// tag.String() returns the language code and the country code, e.g. "en-US"

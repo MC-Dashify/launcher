@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/MC-Dashify/launcher/global"
 	customLog "github.com/sirupsen/logrus"
 )
 
@@ -16,6 +17,8 @@ func Debug(content string) {
 		DisableTimestamp: true,
 	})
 	customLog.SetOutput(ColorableStdout)
-	customLog.SetLevel(customLog.DebugLevel)
+	if global.IsVerbose {
+		customLog.SetLevel(customLog.DebugLevel)
+	}
 	customLog.Debugf(content)
 }
