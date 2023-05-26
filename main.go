@@ -50,8 +50,8 @@ func init() {
 	parseFlags()
 }
 
+// TODO: i18n
 func main() {
-
 	sigs := make(chan os.Signal, 1)
 	done := make(chan bool, 1)
 
