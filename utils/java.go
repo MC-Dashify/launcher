@@ -13,7 +13,7 @@ import (
 var NormalStatusExit bool = false
 
 func CheckJava() (javaFlavor, javaVersion string) {
-	out, err := staticExecutor("java", []string{"-version"})
+	out, err := StaticExecutor("java", []string{"-version"})
 	if err != nil {
 		logger.Error(i18n.Get("java.notfound"))
 		os.Exit(1)
@@ -24,7 +24,7 @@ func CheckJava() (javaFlavor, javaVersion string) {
 }
 
 func RunServer(arguments []string) {
-	interactiveExecutor("java", arguments)
+	InteractiveExecutor("java", arguments)
 }
 
 func SelectOptionByMemory(memory int) []string {
@@ -55,7 +55,7 @@ func SelectOptionByMemory(memory int) []string {
 	return memoryOptions
 }
 
-func staticExecutor(baseCmd string, cmdArgs []string) (string, error) {
+func StaticExecutor(baseCmd string, cmdArgs []string) (string, error) {
 	logger.Debug(fmt.Sprintf("Exec: %v", baseCmd+" "+strings.Join(cmdArgs, " ")))
 
 	cmd := exec.Command(baseCmd, cmdArgs...)
@@ -67,7 +67,7 @@ func staticExecutor(baseCmd string, cmdArgs []string) (string, error) {
 	return string(out), nil
 }
 
-func interactiveExecutor(baseCmd string, cmdArgs []string) error {
+func InteractiveExecutor(baseCmd string, cmdArgs []string) error {
 	logger.Debug(fmt.Sprintf("Exec: %v", baseCmd+" "+strings.Join(cmdArgs, " ")))
 
 	cmd := exec.Command(baseCmd, cmdArgs...)

@@ -22,11 +22,11 @@ func IsValidUrl(toTest string) bool {
 	return true
 }
 
-func GetLastModified(url string) int64 {
+func GetLastModifiedFromUrl(url string) int64 {
 	resp, err := http.Head(url)
 
 	if err != nil {
-		logger.Fatal("Failed to fetch file info")
+		logger.Error("Failed to fetch file info from url")
 	} else {
 		defer resp.Body.Close()
 		_remoteFileTime, err := time.Parse(time.RFC1123, resp.Header.Get("Last-Modified"))

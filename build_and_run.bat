@@ -2,5 +2,6 @@
 set CGO_ENABLED=0
 set GOOS=windows
 set GOARCH=amd64
-go build -o launcher.exe
+go build -o .server/launcher.exe
+cd .server
 launcher.exe --verbose
