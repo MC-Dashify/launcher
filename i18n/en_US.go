@@ -15,7 +15,7 @@ var en_US map[string]string = map[string]string{
 	"general.server.starting":                                   "Starting server...",
 	"general.server.crashed":                                    "It seems the server crashed. If you didn't stop or killed the process manually, Try to check 'launcher.conf.json'",
 	"general.plugin.empty":                                      "No plugins to download! Skipping download...",
-	"general.server.restart":                                    "Server will restart in 5 seconds. Press Ctrl+C to cancel.",
+	"general.server.restart":                                    "The server will restart in 5 seconds. You can exit by pressing Ctrl + C or closing this window or terminal.",
 	"general.cwd.get.failed":                                    "Failed to get current working directory. Error detail: $error",
 	"general.checking.directory":                                "Checking $dir directory...",
 	"general.download.type.invalid":                             "Wrong download type!",

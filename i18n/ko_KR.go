@@ -15,7 +15,7 @@ var ko_KR map[string]string = map[string]string{
 	"general.server.starting":                                   "서버 시작중...",
 	"general.server.crashed":                                    "서버가 충돌한 것 같습니다. 수동으로 서버 프로세스를 강제 종료 한 것이 아니라면, 구성 설정 파일이 올바른지 확인해주세요.",
 	"general.plugin.empty":                                      "다운로드할 플러그인이 없습니다. 건너뛰는중...",
-	"general.server.restart":                                    "서버가 5초 뒤에 재시작 됩니다. Ctrl + C를 눌러 종료할 수 있습니다.",
+	"general.server.restart":                                    "서버가 5초 뒤에 재시작 됩니다. Ctrl + C를 누르거나 이 창 또는 터미널을 닫아서 종료할 수 있습니다.",
 	"general.cwd.get.failed":                                    "현재 작업 경로를 알 수 없습니다. 오류 정보: $error",
 	"general.checking.directory":                                "$dir를 위한 경로 확인중...",
 	"general.download.type.invalid":                             "올바르지 않은 다운로드 유형 발견",
