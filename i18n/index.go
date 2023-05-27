@@ -24,6 +24,9 @@ func Get(key string) string {
 	// tag.String() returns the language code and the country code, e.g. "en-US"
 	switch language {
 	case "ko-KR":
+		if ko_KR[key] == "" {
+			return en_US[key]
+		}
 		return ko_KR[key]
 	default:
 		return en_US[key]
