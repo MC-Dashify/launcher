@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"fmt"
+	"strings"
 
+	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/utils/logger"
 )
 
@@ -27,7 +28,7 @@ func VersionOrdinal(version string) string {
 			continue
 		}
 		if vo[j]+1 > maxByte {
-			logger.Error(fmt.Sprintf("VersionOrdinal: version %q is not valid", version))
+			logger.Error(strings.ReplaceAll(i18n.Get("version.invalid"), "$version", version))
 		}
 		vo = append(vo, b)
 		vo[j]++

@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -56,7 +55,7 @@ func SelectOptionByMemory(memory int) []string {
 }
 
 func StaticExecutor(baseCmd string, cmdArgs []string) (string, error) {
-	logger.Debug(fmt.Sprintf("Exec: %v", baseCmd+" "+strings.Join(cmdArgs, " ")))
+	logger.Debug(strings.ReplaceAll(i18n.Get("general.exec"), "$command", baseCmd+" "+strings.Join(cmdArgs, " ")))
 
 	cmd := exec.Command(baseCmd, cmdArgs...)
 	out, err := cmd.CombinedOutput()
@@ -68,7 +67,7 @@ func StaticExecutor(baseCmd string, cmdArgs []string) (string, error) {
 }
 
 func InteractiveExecutor(baseCmd string, cmdArgs []string) error {
-	logger.Debug(fmt.Sprintf("Exec: %v", baseCmd+" "+strings.Join(cmdArgs, " ")))
+	logger.Debug(strings.ReplaceAll(i18n.Get("general.exec"), "$command", baseCmd+" "+strings.Join(cmdArgs, " ")))
 
 	cmd := exec.Command(baseCmd, cmdArgs...)
 	env := os.Environ()

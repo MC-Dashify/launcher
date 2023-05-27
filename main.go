@@ -4,10 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/signal"
 	"runtime"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/MC-Dashify/launcher/config"
@@ -34,103 +32,114 @@ type runtimeJar struct {
 func parseFlags() {
 	langFlag := flag.String("lang", "", i18n.Get("flag.lang.desc"))
 	verboseFlag := flag.Bool("verbose", false, i18n.Get("flag.verbose.desc"))
+	versionFlag := flag.Bool("version", false, i18n.Get("flag.version.desc"))
+	configHelpFlag := flag.Bool("config-help", false, i18n.Get("flag.config.help.desc"))
 
 	flag.Parse()
 	if (*langFlag) != "" {
 		global.IsLanguageForced = true
 		global.ForcedLanguage = *langFlag
 	}
+	if *versionFlag {
+		logger.Info(strings.ReplaceAll(i18n.Get("version.info"), "$version", global.Version))
+		os.Exit(0)
+	}
+	if *configHelpFlag {
+		logger.Info(i18n.Get("config.help"))
+		os.Exit(0)
+	}
 	if *verboseFlag {
 		global.IsVerbose = true
 	}
+
 }
 
 func init() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	logger.InitLogger()
 	parseFlags()
 }
 
-// TODO: i18n
 func main() {
-	sigs := make(chan os.Signal, 1)
-	done := make(chan bool, 1)
+	// sigs := make(chan os.Signal, 1)
+	// done := make(chan bool, 1)
 
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	// signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-	go func() {
-		<-sigs
-		logger.Info("Exiting...")
-		done <- true
+	// go func() {
+	// 	<-sigs
+	// 	logger.Info(i18n.Get("general.exiting"))
+	// 	done <- true
+	// 	os.Exit(0)
+	// }()
+
+	config.ConfigContent = config.LoadConfig()
+
+	javaFlavour, javaVersion := utils.CheckJava()
+	logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("java.detected"), "$javaFlavour", javaFlavour), "$javaVersion", javaVersion))
+
+	if strings.HasPrefix(config.ConfigContent.Server, "http://") || strings.HasPrefix(config.ConfigContent.Server, "https://") {
+		dlServerChannel := make(chan bool)
+
+		go downloadJar([]string{config.ConfigContent.Server}, "server", dlServerChannel)
+
+		dlServerResult := <-dlServerChannel
+
+		if dlServerResult {
+			logger.Info(i18n.Get("general.server.download.success"))
+		} else {
+			logger.Error(i18n.Get("general.server.download.failed"))
+		}
+	} else if strings.HasPrefix(config.ConfigContent.Server, "file") {
+		logger.Info(i18n.Get("general.server.source.local"))
+		serverFilePath = strings.ReplaceAll(config.ConfigContent.Server, "file://", "")
+		if _, err := os.Stat(serverFilePath); os.IsNotExist(err) {
+			logger.Fatal(i18n.Get("general.server.source.local.notfound.or.permission.denied"))
+		}
+	} else {
+		logger.Fatal(i18n.Get("general.server.source.invalid.protocol"))
+	}
+
+	if len(config.ConfigContent.Plugins) > 0 {
+		dlPluginsChannel := make(chan bool)
+		go downloadJar(config.ConfigContent.Plugins, "plugins", dlPluginsChannel)
+		dlPluginsResult := <-dlPluginsChannel
+
+		if dlPluginsResult {
+			logger.Info(i18n.Get("general.plugin.download.success"))
+		} else {
+			logger.Error(i18n.Get("general.plugin.download.failed"))
+		}
+	} else {
+		logger.Info(i18n.Get("general.plugin.empty"))
+	}
+
+	runtimeArgs := prepareRuntime(runtimeJar{}, config.ConfigContent)
+
+	customArgs := append(append(runtimeArgs.arguments, "-jar"), runtimeArgs.serverFile)
+
+	for _, customArg := range config.ConfigContent.JarArgs {
+		customArgs = append(customArgs, customArg)
+	}
+	startServer(customArgs)
+	// <-done
+}
+
+func startServer(customArgs []string) {
+	logger.Info(i18n.Get("general.server.starting"))
+	utils.RunServer(customArgs)
+	if !utils.NormalStatusExit {
+		logger.Fatal(i18n.Get("general.server.crashed"))
+	}
+	if config.ConfigContent.Restart {
+		logger.Info(i18n.Get("general.server.restart"))
+		fmt.Print("> ")
+		time.Sleep(5 * time.Second)
+		fmt.Print("\n")
+		startServer(customArgs)
+	} else {
+		logger.Info(i18n.Get("general.exiting"))
 		os.Exit(0)
-	}()
-	for {
-		config.ConfigContent = config.LoadConfig()
-
-		javaFlavour, javaVersion := utils.CheckJava()
-		logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("java.detected"), "$javaFlavour", javaFlavour), "$javaVersion", javaVersion))
-
-		if strings.HasPrefix(config.ConfigContent.Server, "http") {
-			dlServerChannel := make(chan bool)
-
-			go downloadJar([]string{config.ConfigContent.Server}, "server", dlServerChannel)
-
-			dlServerResult := <-dlServerChannel
-
-			if dlServerResult {
-				logger.Info("Server file download job is done!")
-			} else {
-				logger.Info("Server file download job is failed!")
-			}
-		} else if strings.HasPrefix(config.ConfigContent.Server, "file") {
-			logger.Info("Server file source is local, skipping download...")
-			serverFilePath = strings.ReplaceAll(config.ConfigContent.Server, "file://", "")
-			if _, err := os.Stat(serverFilePath); os.IsNotExist(err) {
-				logger.Fatal("Server file not found!")
-			}
-		} else {
-			logger.Fatal("Invalid server file source!")
-		}
-
-		if len(config.ConfigContent.Plugins) > 0 {
-			dlPluginsChannel := make(chan bool)
-			go downloadJar(config.ConfigContent.Plugins, "plugins", dlPluginsChannel)
-			dlPluginsResult := <-dlPluginsChannel
-
-			if dlPluginsResult {
-				logger.Info("Plugin file(s) download job is done!")
-			} else {
-				logger.Info("Plugin file(s) download job is failed!")
-			}
-		} else {
-			logger.Info("No plugins to download! Skipping...")
-		}
-
-		runtimeArgs := prepareRuntime(runtimeJar{}, config.ConfigContent)
-
-		customArgs := append(append(runtimeArgs.arguments, "-jar"), runtimeArgs.serverFile)
-
-		for _, customArg := range config.ConfigContent.JarArgs {
-			customArgs = append(customArgs, customArg)
-		}
-
-		utils.RunServer(customArgs)
-		if config.ConfigContent.Restart {
-			logger.Info("Server will restart in 5 seconds. Press Ctrl+C to cancel")
-			fmt.Print("> ")
-
-			select {
-			case <-time.After(5000 * time.Millisecond):
-				fmt.Print("\n")
-				logger.Info("Starting Server...")
-			}
-		} else {
-			logger.Info("Exiting...")
-			os.Exit(0)
-		}
-		if !utils.NormalStatusExit {
-			logger.Fatal("There was an error while running server. If you didn't stop the process manually, Try to check 'launcher.conf.json'")
-		}
-		<-done
 	}
 }
 
@@ -142,7 +151,7 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 	if downloadType == "server" {
 		currentDir, err := os.Getwd()
 		if err != nil {
-			logger.Fatal(fmt.Sprintf("Failed to get current working dir: %s", err))
+			logger.Fatal(strings.ReplaceAll(i18n.Get("general.cwd.get.failed"), "$error", err.Error()))
 		}
 		serverDirectory := ""
 		if runtime.GOOS == "windows" {
@@ -151,7 +160,7 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 			serverDirectory = currentDir + "/.launcher/jars/"
 		}
 
-		logger.Info(fmt.Sprintf("Checking %s directory...", downloadType))
+		logger.Info(strings.ReplaceAll(i18n.Get("general.checking.directory"), "$dir", downloadType))
 		utils.CheckFolderExist(serverDirectory)
 		downloadDest = serverDirectory
 
@@ -159,15 +168,15 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 		currentPath, _ := os.Getwd()
 		pluginDirectory := currentPath + "/plugins/"
 
-		logger.Info(fmt.Sprintf("Checking %s directory...", downloadType))
+		logger.Info(strings.ReplaceAll(i18n.Get("general.checking.directory"), "$dir", downloadType))
 		utils.CheckFolderExist(pluginDirectory)
 		downloadDest = pluginDirectory
 
 	} else {
-		logger.Fatal("Wrong download type!")
+		logger.Fatal(i18n.Get("general.download.type.invalid"))
 	}
 
-	logger.Info(fmt.Sprintf("Preparing parallel download for %s...", downloadType))
+	logger.Info(strings.ReplaceAll(i18n.Get("general.download.preparing"), "$file", downloadType))
 	for _, url := range urls {
 		go downloadFile(downloadType, downloadDest, url, dlChannel)
 	}
@@ -179,10 +188,10 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 
 	for downloadedFile, downloadError := range results {
 		if downloadError != nil {
-			logger.Error(fmt.Sprintf("There was an error while downloading %s: %s", downloadedFile, downloadError))
+			logger.Error(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("general.download.failed"), "$file", downloadedFile), "$error", downloadError.Error()))
 		}
 	}
-	logger.Info(fmt.Sprintf("Downloaded all %s files!", downloadType))
+	logger.Info(strings.ReplaceAll(i18n.Get("general.download.success"), "$type", downloadType))
 	complete <- true
 }
 
@@ -194,53 +203,47 @@ func downloadFile(downloadType, downloadDir, url string, err chan<- downloadResu
 
 	client := grab.NewClient()
 	req, _ := grab.NewRequest(downloadDir, url)
-	req.NoResume = true
+	req.NoResume = false
 	resp := client.Do(req)
 
-	if _, checkFileErr := os.Stat(resp.Filename); !os.IsNotExist(checkFileErr) {
-		logger.Info(fmt.Sprintf("File(%s) is already exist. Skipping download...", resp.Filename))
-	} else {
-		t := time.NewTicker(time.Second)
-		defer t.Stop()
-	Loop:
-		for {
-			select {
-			case <-t.C:
-				etaTime := time.Until(resp.ETA()).Round(time.Second).String()
+	t := time.NewTicker(time.Second)
+	defer t.Stop()
+Loop:
+	for {
+		select {
+		case <-t.C:
+			etaTime := time.Until(resp.ETA()).Round(time.Second).String()
 
-				if strings.Contains(etaTime, "-") {
-					etaTime = "Calculating..."
-				}
-
-				downloadSpeed := utils.ByteCounter(int64(resp.BytesPerSecond()))
-				currentDownloaded := utils.ByteCounter(resp.BytesComplete())
-				totalDownloaded := utils.ByteCounter(resp.Size())
-
-				var jarPath []string
-				if runtime.GOOS == "windows" {
-					jarPath = strings.Split(resp.Filename, "\\")
-				} else {
-					jarPath = strings.Split(resp.Filename, "/")
-				}
-				logger.Info(fmt.Sprintf("[%s] Downloaded %s of %s | ETA: %s | Download Speed: %s/s", jarPath[len(jarPath)-1], currentDownloaded,
-					totalDownloaded,
-					etaTime,
-					downloadSpeed))
-
-			case <-resp.Done:
-				break Loop
+			if strings.Contains(etaTime, "-") {
+				etaTime = i18n.Get("general.calculating")
 			}
+
+			downloadSpeed := utils.ByteCounter(int64(resp.BytesPerSecond()))
+			currentDownloaded := utils.ByteCounter(resp.BytesComplete())
+			totalDownloaded := utils.ByteCounter(resp.Size())
+
+			var jarPath []string
+			if runtime.GOOS == "windows" {
+				jarPath = strings.Split(resp.Filename, "\\")
+			} else {
+				jarPath = strings.Split(resp.Filename, "/")
+			}
+			logger.Info(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("general.download.progress"), "$fileName", jarPath[len(jarPath)-1]), "$downloadedSize", currentDownloaded), "$fileSize", totalDownloaded), "$eta", etaTime), "$downloadSpeed", downloadSpeed))
+
+		case <-resp.Done:
+			break Loop
 		}
-
-		if dlErr := resp.Err(); dlErr != nil {
-			logger.Error(fmt.Sprintf("Download failed: %s\n", dlErr))
-			err <- downloadResult{file: resp.Filename, dlerr: dlErr}
-		}
-
-		jarPath := strings.Split(resp.Filename, "/")
-
-		logger.Info(fmt.Sprintf("[%s] Download complete", jarPath[len(jarPath)-1]))
 	}
+
+	if dlErr := resp.Err(); dlErr != nil {
+		logger.Error(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("general.download.failed"), "$file", resp.Filename), "$error", dlErr.Error()))
+		err <- downloadResult{file: resp.Filename, dlerr: dlErr}
+	}
+
+	jarPath := strings.Split(resp.Filename, "/")
+
+	logger.Info(strings.ReplaceAll(i18n.Get("general.download.done"), "$fileName", jarPath[len(jarPath)-1]))
+
 	if downloadType == "server" {
 		serverFilePath = resp.Filename
 	}

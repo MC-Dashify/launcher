@@ -70,6 +70,12 @@ func LoadConfig() Config {
 		if config.PluginPort <= 0 || config.PluginPort > 65535 {
 			logger.Fatal(i18n.Get("config.plugin_api_port.invalid"))
 		}
+		if config.DebugPort <= 0 || config.DebugPort > 65535 {
+			logger.Fatal(i18n.Get("config.debug_port.invalid"))
+		}
+		if config.Memory < 2 {
+			logger.Fatal(i18n.Get("config.memory.invalid"))
+		}
 	}
 	return config
 }

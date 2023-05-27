@@ -3,14 +3,16 @@ package utils
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/utils/logger"
 )
 
 func CheckFolderExist(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		logger.Warn("Generating missing folders")
+		logger.Warn(i18n.Get("file.generating.missings"))
 		Mkdir(path, 0755)
 	}
 }
@@ -24,7 +26,7 @@ func Mkdir(path string, perm os.FileMode) {
 
 func ByteCounter(b int64) string {
 	if b == -1 {
-		return "Unknown Size"
+		return i18n.Get("file.unknown.size")
 	}
 	const unit = 1000
 	if b < unit {
@@ -43,7 +45,7 @@ func GetLastModifiedFromLocal(path string) int64 {
 	fileinfo, err := os.Stat(path)
 
 	if err != nil {
-		logger.Error("Failed to fetch file info from local")
+		logger.Error(strings.ReplaceAll(i18n.Get("file.info.fetch.failed"), "$error", err.Error()))
 	} else {
 		return fileinfo.ModTime().Unix()
 	}
