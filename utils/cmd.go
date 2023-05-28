@@ -9,8 +9,6 @@ import (
 	"github.com/MC-Dashify/launcher/utils/logger"
 )
 
-var NormalStatusExit bool = false
-
 func CheckJava() (javaFlavor, javaVersion string) {
 	out, err := StaticExecutor("java", []string{"-version"})
 	if err != nil {
@@ -22,12 +20,8 @@ func CheckJava() (javaFlavor, javaVersion string) {
 	return javaFlavor, javaVersion
 }
 
-func RunServer(arguments []string) {
-	InteractiveExecutor("java", arguments)
-}
-
 func SelectOptionByMemory(memory int) []string {
-	memoryOptions := []string{"--add-modules=jdk.incubator.vector"}
+	memoryOptions := []string{"-Dfile.encoding=UTF-8", "--add-modules=jdk.incubator.vector"}
 	if memory >= 12 {
 		logger.Info("Using Aikar's Advanced memory options")
 		for _, option := range []string{
@@ -64,26 +58,4 @@ func StaticExecutor(baseCmd string, cmdArgs []string) (string, error) {
 	}
 
 	return string(out), nil
-}
-
-func InteractiveExecutor(baseCmd string, cmdArgs []string) error {
-	logger.Debug(strings.ReplaceAll(i18n.Get("general.exec"), "$command", baseCmd+" "+strings.Join(cmdArgs, " ")))
-
-	cmd := exec.Command(baseCmd, cmdArgs...)
-	env := os.Environ()
-	cmd.Env = env
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin // setting this allowed me to interact with ncurses interface from `make menuconfig`
-
-	err := cmd.Start()
-	if err != nil {
-		return err
-	}
-
-	if err := cmd.Wait(); err != nil {
-		return err
-	}
-	NormalStatusExit = true
-	return nil
 }

@@ -3,12 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 	"runtime"
 	"strings"
 	"time"
 
 	"github.com/MC-Dashify/launcher/config"
+	"github.com/MC-Dashify/launcher/dashifyws"
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/utils"
@@ -61,17 +63,37 @@ func init() {
 }
 
 func main() {
-	// sigs := make(chan os.Signal, 1)
-	// done := make(chan bool, 1)
 
-	// signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	dashifyws.Server = &http.Server{
+		Addr:    ":8080",
+		Handler: nil, // 디폴트 핸들러 사용
+	}
+	go dashifyws.Server.ListenAndServe()
 
-	// go func() {
-	// 	<-sigs
-	// 	logger.Info(i18n.Get("general.exiting"))
-	// 	done <- true
-	// 	os.Exit(0)
-	// }()
+	runner()
+	for {
+		if !global.NormalStatusExit {
+			logger.Fatal(i18n.Get("general.server.crashed"))
+		}
+		if config.ConfigContent.Restart {
+			if !global.IsMCServerRunning {
+
+				logger.Info(i18n.Get("general.server.restart"))
+				fmt.Print("> ")
+				time.Sleep(5 * time.Second)
+				fmt.Print("\n")
+
+				dashifyws.IsRestart = true
+				runner()
+			}
+		} else {
+			logger.Info(i18n.Get("general.exiting"))
+			os.Exit(0)
+		}
+	}
+}
+
+func runner() {
 
 	config.ConfigContent = config.LoadConfig()
 
@@ -121,26 +143,16 @@ func main() {
 	for _, customArg := range config.ConfigContent.JarArgs {
 		customArgs = append(customArgs, customArg)
 	}
+	global.JarArgs = customArgs
 	startServer(customArgs)
+
 	// <-done
 }
 
 func startServer(customArgs []string) {
 	logger.Info(i18n.Get("general.server.starting"))
-	utils.RunServer(customArgs)
-	if !utils.NormalStatusExit {
-		logger.Fatal(i18n.Get("general.server.crashed"))
-	}
-	if config.ConfigContent.Restart {
-		logger.Info(i18n.Get("general.server.restart"))
-		fmt.Print("> ")
-		time.Sleep(5 * time.Second)
-		fmt.Print("\n")
-		startServer(customArgs)
-	} else {
-		logger.Info(i18n.Get("general.exiting"))
-		os.Exit(0)
-	}
+	dashifyws.RunServer(customArgs)
+	global.NormalStatusExit = true
 }
 
 func downloadJar(urls []string, downloadType string, complete chan<- bool) {
