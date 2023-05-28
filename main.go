@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net/http"
@@ -10,11 +11,11 @@ import (
 	"time"
 
 	"github.com/MC-Dashify/launcher/config"
-	"github.com/MC-Dashify/launcher/dashifyws"
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
+	"github.com/MC-Dashify/launcher/webconsole"
 
 	"github.com/cavaliergopher/grab/v3"
 )
@@ -63,33 +64,34 @@ func init() {
 }
 
 func main() {
-
-	dashifyws.Server = &http.Server{
+	webconsole.Server = &http.Server{
 		Addr:    ":8080",
 		Handler: nil, // 디폴트 핸들러 사용
 	}
-	go dashifyws.Server.ListenAndServe()
+	go webconsole.Server.ListenAndServe()
 
 	runner()
 	for {
 		if !global.NormalStatusExit {
 			logger.Fatal(i18n.Get("general.server.crashed"))
 		}
-		if config.ConfigContent.Restart {
-			if !global.IsMCServerRunning {
 
+		if !global.IsMCServerRunning {
+			if config.ConfigContent.Restart {
 				logger.Info(i18n.Get("general.server.restart"))
 				fmt.Print("> ")
 				time.Sleep(5 * time.Second)
 				fmt.Print("\n")
 
-				dashifyws.IsRestart = true
+				webconsole.IsRestart = true
 				runner()
+			} else {
+				logger.Info(i18n.Get("general.exiting"))
+				webconsole.Server.Shutdown(context.Background())
+				os.Exit(0)
 			}
-		} else {
-			logger.Info(i18n.Get("general.exiting"))
-			os.Exit(0)
 		}
+		time.Sleep(100 * time.Millisecond)
 	}
 }
 
@@ -151,7 +153,7 @@ func runner() {
 
 func startServer(customArgs []string) {
 	logger.Info(i18n.Get("general.server.starting"))
-	dashifyws.RunServer(customArgs)
+	webconsole.RunServer(customArgs)
 	global.NormalStatusExit = true
 }
 

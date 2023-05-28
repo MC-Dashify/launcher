@@ -1,4 +1,4 @@
-package dashifyws
+package webconsole
 
 import (
 	"bufio"
