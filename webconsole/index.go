@@ -18,9 +18,8 @@ import (
 )
 
 var (
-	Server     *http.Server
-	h          *WebSocketHandler // WebSocketHandler 인스턴스를 전역 변수로 변경
-	cmdStopped = make(chan bool) // command 실행 중지 신호를 전달하는 채널
+	Server *http.Server
+	h      *WebSocketHandler // WebSocketHandler 인스턴스를 전역 변수로 변경
 )
 
 var upgrader = websocket.Upgrader{
@@ -148,9 +147,9 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartWebsocket() {
-	logger.Debug("=========================")
-	logger.Debug("Websocket Server Started!")
-	logger.Debug("=========================")
+	logger.Info("+----------------------------+")
+	logger.Info("| WebConsole Server Started! |")
+	logger.Info("+----------------------------+")
 	if h != nil {
 		logger.Debug(fmt.Sprintf("Restoring Previous Connection: %+v", &h.connectChan))
 	}
