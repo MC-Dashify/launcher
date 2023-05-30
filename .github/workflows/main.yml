@@ -47,6 +47,9 @@ jobs:
       - name: Build for Windows x86
         run: CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -a -o build/launcher_windows_x86.exe
 
+      - name: Build for Windows arm64
+        run: CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -a -o build/launcher_windows_arm64.exe
+
       - name: Check Files
         run: ls -al . && ls -al build/
 
@@ -73,6 +76,9 @@ jobs:
 
       - name: Zip Build file for Windows x86
         run: mv build/launcher_windows_x86.exe ./launcher.exe && zip launcher_windows_x86.exe.zip launcher.exe && rm -rf launcher.exe
+
+      - name: Zip Build file for Windows arm64
+        run: mv build/launcher_windows_arm64.exe ./launcher.exe && zip launcher_windows_arm64.exe.zip launcher.exe && rm -rf launcher.exe
 
       - name: Set Version
         run: echo "::set-output name=version::$(echo ${{ github.sha }} | cut -c -6)"
@@ -170,4 +176,14 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: launcher_windows_x86.exe.zip
           asset_name: launcher_windows_x86.exe.zip
+          asset_content_type: application/zip
+
+      - name: Upload Windows arm64 Artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: launcher_windows_arm64.exe.zip
+          asset_name: launcher_windows_arm64.exe.zip
           asset_content_type: application/zip
