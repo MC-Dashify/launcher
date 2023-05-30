@@ -109,6 +109,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		logger.Error(fmt.Sprintf("%+v", err))
 		return
 	}
+	logger.Info(fmt.Sprintf("[WebConsole] New Connection: %+v", conn.RemoteAddr().String()))
 
 	// 새로운 웹소켓 연결을 connectChan에 전달
 	// logger.Debug(fmt.Sprintf("%v", &h.connectChan))
@@ -132,17 +133,17 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-				logger.Error(fmt.Sprintf("%+v", err))
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseMessage, websocket.CloseNoStatusReceived) {
+				logger.Error(fmt.Sprintf("[WebConsole] Connection from %+v closed due to following error:\n%+v", conn.RemoteAddr().String(), err))
 			}
 			break
 		}
-		h.console.Println(string(msg)) // 콘솔에 출력
+		// h.console.Println(string(msg)) // 콘솔에 출력
 
 		// 메시지를 한 번만 처리하기 위해 다음과 같이 수정합니다.
 		h.inputChan <- string(msg)
 
-		logger.Debug(fmt.Sprintf("RCV: %+v", string(msg)))
+		logger.Info(fmt.Sprintf("[WebConsole] FROM %+v CMD: %+v", conn.RemoteAddr().String(), string(msg)))
 	}
 }
 
@@ -150,8 +151,9 @@ func StartWebsocket() {
 	logger.Info("+----------------------------+")
 	logger.Info("| WebConsole Server Started! |")
 	logger.Info("+----------------------------+")
+	logger.Debug("[WebConsole] Checking Valid Previous Connections...")
 	if h != nil {
-		logger.Debug(fmt.Sprintf("Restoring Previous Connection: %+v", &h.connectChan))
+		logger.Debug(fmt.Sprintf("[WebConsole] Restoring Previous Connection: %+v", &h.connectChan))
 	}
 	h = &WebSocketHandler{
 		console:      log.New(os.Stdout, "", 0),
@@ -182,6 +184,7 @@ func StartWebsocket() {
 			}
 			h.mu.Unlock()
 			conn.Close()
+			logger.Info(fmt.Sprintf("[WebConsole] Closed Connection: %+v", conn.RemoteAddr().String()))
 		}
 	}()
 
@@ -192,7 +195,7 @@ func StartWebsocket() {
 			input, err := reader.ReadString('\n')
 			if err != nil {
 				if global.IsMCServerRunning {
-					logger.Error(fmt.Sprintf("%+v", err))
+					logger.Warn("Unsafe process kill detected. Please use 'stop' command to stop the server. Do not use Ctrl + C or Ctrl + D to stop the server.")
 				}
 			}
 			input = strings.TrimSpace(input)
@@ -227,20 +230,23 @@ func StartWebsocket() {
 
 	err = global.Cmd.Start()
 	if err != nil {
-		logger.Fatal(fmt.Sprintf("%v", err.Error()))
+		logger.Fatal(fmt.Sprintf("Failed to start JVM Runtime: %v", err.Error()))
 	} else {
 		global.IsMCServerRunning = true
-		global.NormalStatusExit = false
+		global.NormalStatusExit = true
 	}
 
 	go func() {
 		err := global.Cmd.Wait()
 		if err != nil {
-			logger.Error(fmt.Sprintf("%+v", err))
+			global.IsMCServerRunning = false
+			global.NormalStatusExit = false
+			logger.Debug(fmt.Sprintf("%+v", err))
+		} else {
+			global.IsMCServerRunning = false
+			global.NormalStatusExit = true
 		}
-		logger.Debug("Minecraft server stopped.")
-		global.IsMCServerRunning = false
-		global.NormalStatusExit = true
+		logger.Debug("JVM Runtime stopped.")
 		h.commandEnded <- true // command 종료 신호를 전달
 	}()
 
@@ -250,7 +256,7 @@ func StartWebsocket() {
 			for _, conn := range h.connections {
 				err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 				if err != nil {
-					logger.Error(fmt.Sprintf("14%+v", err))
+					logger.Warn(fmt.Sprintf("Failed to send ws close message. Error detail: %+v", err))
 				}
 				conn.Close()
 			}

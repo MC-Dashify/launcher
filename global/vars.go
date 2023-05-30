@@ -15,5 +15,5 @@ var Cmd *exec.Cmd
 
 var JarArgs []string
 
-var NormalStatusExit bool = false
+var NormalStatusExit bool = true
 var IsMCServerRunning bool = false
