@@ -109,7 +109,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		logger.Error(fmt.Sprintf("%+v", err))
 		return
 	}
-	logger.Info(fmt.Sprintf("[WebConsole] New Connection: %+v", conn.RemoteAddr().String()))
+	logger.Info(strings.ReplaceAll(i18n.Get("webconsole.connection.opened"), "$connection", conn.RemoteAddr().String()))
 
 	// 새로운 웹소켓 연결을 connectChan에 전달
 	// logger.Debug(fmt.Sprintf("%v", &h.connectChan))
@@ -134,7 +134,7 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseMessage, websocket.CloseNoStatusReceived) {
-				logger.Error(fmt.Sprintf("[WebConsole] Connection from %+v closed due to following error:\n%+v", conn.RemoteAddr().String(), err))
+				logger.Error(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.closed.error"), "$connection", conn.RemoteAddr().String()), "$error", err.Error()))
 			}
 			break
 		}
@@ -143,17 +143,17 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		// 메시지를 한 번만 처리하기 위해 다음과 같이 수정합니다.
 		h.inputChan <- string(msg)
 
-		logger.Info(fmt.Sprintf("[WebConsole] FROM %+v CMD: %+v", conn.RemoteAddr().String(), string(msg)))
+		logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.cmd.received"), "$remote", conn.RemoteAddr().String()), "$command", string(msg)))
 	}
 }
 
 func StartWebsocket() {
-	logger.Info("+----------------------------+")
-	logger.Info("| WebConsole Server Started! |")
-	logger.Info("+----------------------------+")
-	logger.Debug("[WebConsole] Checking Valid Previous Connections...")
+	logger.Info(i18n.Get("webconsole.started1"))
+	logger.Info(i18n.Get("webconsole.started2"))
+	logger.Info(i18n.Get("webconsole.started1"))
+	logger.Debug(i18n.Get("webconsole.chk.valid.prev.connection"))
 	if h != nil {
-		logger.Debug(fmt.Sprintf("[WebConsole] Restoring Previous Connection: %+v", &h.connectChan))
+		logger.Debug(strings.ReplaceAll(i18n.Get("webconsole.restoring.prev.connection"), "$connection", fmt.Sprintf("%+v", &h.connectChan)))
 	}
 	h = &WebSocketHandler{
 		console:      log.New(os.Stdout, "", 0),
@@ -184,7 +184,7 @@ func StartWebsocket() {
 			}
 			h.mu.Unlock()
 			conn.Close()
-			logger.Info(fmt.Sprintf("[WebConsole] Closed Connection: %+v", conn.RemoteAddr().String()))
+			logger.Info(strings.ReplaceAll(i18n.Get("webconsole.connection.closed"), "$connection", conn.RemoteAddr().String()))
 		}
 	}()
 
@@ -195,7 +195,7 @@ func StartWebsocket() {
 			input, err := reader.ReadString('\n')
 			if err != nil {
 				if global.IsMCServerRunning {
-					logger.Warn("Unsafe process kill detected. Please use 'stop' command to stop the server. Do not use Ctrl + C or Ctrl + D to stop the server.")
+					logger.Warn(i18n.Get("general.unsafe.shutdown"))
 				}
 			}
 			input = strings.TrimSpace(input)
@@ -230,7 +230,7 @@ func StartWebsocket() {
 
 	err = global.Cmd.Start()
 	if err != nil {
-		logger.Fatal(fmt.Sprintf("Failed to start JVM Runtime: %v", err.Error()))
+		logger.Fatal(strings.ReplaceAll(i18n.Get("java.jvm.start.failed"), "$error", err.Error()))
 	} else {
 		global.IsMCServerRunning = true
 		global.NormalStatusExit = true
@@ -246,7 +246,7 @@ func StartWebsocket() {
 			global.IsMCServerRunning = false
 			global.NormalStatusExit = true
 		}
-		logger.Debug("JVM Runtime stopped.")
+		logger.Debug(i18n.Get("java.jvm.stopped"))
 		h.commandEnded <- true // command 종료 신호를 전달
 	}()
 
@@ -256,7 +256,7 @@ func StartWebsocket() {
 			for _, conn := range h.connections {
 				err := conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 				if err != nil {
-					logger.Warn(fmt.Sprintf("Failed to send ws close message. Error detail: %+v", err))
+					logger.Warn(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.close.msg.send.fail"), "$connection", conn.RemoteAddr().String()), "$error", err.Error()))
 				}
 				conn.Close()
 			}

@@ -64,8 +64,9 @@ func init() {
 }
 
 func main() {
+	config.ConfigContent = config.LoadConfig()
 	webconsole.Server = &http.Server{
-		Addr:    fmt.Sprintf("%d", config.ConfigContent.APIPort),
+		Addr:    fmt.Sprintf(":%d", config.ConfigContent.APIPort),
 		Handler: nil, // 디폴트 핸들러 사용
 	}
 	go webconsole.Server.ListenAndServe()
@@ -95,9 +96,6 @@ func main() {
 }
 
 func runner() {
-
-	config.ConfigContent = config.LoadConfig()
-
 	javaFlavour, javaVersion := utils.CheckJava()
 	logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("java.detected"), "$javaFlavour", javaFlavour), "$javaVersion", javaVersion))
 

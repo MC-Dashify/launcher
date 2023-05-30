@@ -25,10 +25,13 @@ var en_US map[string]string = map[string]string{
 	"general.download.file.exist":                               "File($file) already exists. Skipping download...",
 	"general.download.progress":                                 "[$fileName] Downloaded $downloadedSize of $fileSize | ETA: $eta | Download Speed: $downloadSpeed/s",
 	"general.download.done":                                     "[$fileName] Download Complete.",
+	"general.unsafe.shutdown":                                   "Unsafe process kill detected. Please use 'stop' command to stop the server. Do not use Ctrl + C or Ctrl + D to stop the server.",
 
 	//Java
-	"java.detected": "Detected $javaFlavour $javaVersion.",
-	"java.notfound": "Java not found. Please install Java or check your PATH environment variable.",
+	"java.detected":       "Detected $javaFlavour $javaVersion.",
+	"java.notfound":       "Java not found. Please install Java or check your PATH environment variable.",
+	"java.jvm.stopped":    "JVM Runtime stopped.",
+	"java.jvm.fail.start": "Failed to start JVM Runtime. Error detail: $error",
 
 	// Flags
 	"flag.lang.desc":        "Language to disply. Value should be like 'en-US' or 'ko-KR'.",
@@ -48,6 +51,17 @@ var en_US map[string]string = map[string]string{
 	// Version
 	"version.invalid": "Version $version is invalid.",
 	"version.info":    "MC-Dashify launcher v.$version",
+
+	// WebConsole
+	"webconsole.started1":                  "+----------------------------+",
+	"webconsole.started2":                  "| WebConsole Server Started! |",
+	"webconsole.chk.valid.prev.connection": "[WebConsole] Checking Valid Previous Connections...",
+	"webconsole.restoring.prev.connection": "[WebConsole] Restoring Previous Connection: $connection",
+	"webconsole.connection.closed":         "[WebConsole] Connection Closed: $connection",
+	"webconsole.connection.closed.error":   "[WebConsole] Connection from $remote closed due to following error: $error",
+	"webconsole.connection.close.msg.send.fail": "[WebConsole] Failed to send connection close message to $remote. Error detail: $error",
+	"webconsole.connection.opened":         "[WebConsole] Connection Opened: $connection",
+	"webconsole.connection.cmd.received":   "[WebConsole] FROM $remote CMD: $command",
 
 	// Config
 	"config.notfound":                "Config file not found. Creating new one...",

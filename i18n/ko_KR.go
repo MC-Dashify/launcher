@@ -25,10 +25,13 @@ var ko_KR map[string]string = map[string]string{
 	"general.download.file.exist":                               "파일($file)이 이미 존재합니다. 다운로드를 건너뛰는중...",
 	"general.download.progress":                                 "[$fileName] 전체 $fileSize중 $downloadedSize 다운로드 됨 | 예상 남은 시간: $eta | 다운로드 속도: $downloadSpeed/s",
 	"general.download.done":                                     "[$fileName] 다운로드 완료.",
+	"general.unsafe.shutdown":                                   "안전하지 않은 종료가 감지되었습니다. 'stop' 명령어를 사용하여 서버를 정상적으로 종료해 주세요. Ctrl + C 또는 Ctrl + D와 같은 강제 종료 명령어를 사용하지 않는 것을 권장합니다.",
 
 	// Java
-	"java.detected": "$javaVersion 버전의 $javaFlavour Java를 감지했습니다.",
-	"java.notfound": "Java를 찾을 수 없습니다. Java를 설치하거나 PATH 환경 변수를 확인해주세요.",
+	"java.detected":       "$javaVersion 버전의 $javaFlavour Java를 감지했습니다.",
+	"java.notfound":       "Java를 찾을 수 없습니다. Java를 설치하거나 PATH 환경 변수를 확인해주세요.",
+	"java.jvm.stopped":    "JVM Runtime 종료됨.",
+	"java.jvm.fail.start": "JVM Runtime을 시작하는데 실패했습니다. 오류 정보: $error",
 
 	// 인자
 	"flag.lang.desc":        "표시할 언어를 선택합니다. 인자는 'en-US' 또는 'ko-KR' 같은 형식이어야 합니다.",
@@ -48,6 +51,17 @@ var ko_KR map[string]string = map[string]string{
 	// 버전
 	"version.invalid": "버전 $version은 올바르지 않습니다.",
 	"version.info":    "MC-Dashify launcher v.$version",
+
+	// WebConsole
+	"webconsole.started1":                       "+-------------------------+",
+	"webconsole.started2":                       "| WebConsole 서버 시작됨! |",
+	"webconsole.chk.valid.prev.connection":      "[WebConsole] 유효한 이전 연결 확인중...",
+	"webconsole.restoring.prev.connection":      "[WebConsole] 이전 연결 복원중: $connection",
+	"webconsole.connection.closed":              "[WebConsole] 연결 종료됨: $connection",
+	"webconsole.connection.closed.error":        "[WebConsole] 다음 오류로 인해 $remote와의 연결이 종료되었습니다: $error",
+	"webconsole.connection.close.msg.send.fail": "[WebConsole] $remote에 연결 종료 메세지를 보내는데 실패했습니다. 오류 정보: $error",
+	"webconsole.connection.opened":              "[WebConsole] 연결 수립됨: $connection",
+	"webconsole.connection.cmd.received":        "[WebConsole] $remote로부터의 명령: $command",
 
 	// 구성 설정 관련
 	"config.notfound":                "구성 설정 파일을 찾을 수 없습니다. 새로 생성중...",
