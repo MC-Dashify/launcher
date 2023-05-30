@@ -65,7 +65,7 @@ func init() {
 
 func main() {
 	webconsole.Server = &http.Server{
-		Addr:    ":8080",
+		Addr:    fmt.Sprintf("%d", config.ConfigContent.APIPort),
 		Handler: nil, // 디폴트 핸들러 사용
 	}
 	go webconsole.Server.ListenAndServe()
@@ -81,9 +81,8 @@ func main() {
 				logger.Info(i18n.Get("general.server.restart"))
 				fmt.Print("> ")
 				time.Sleep(5 * time.Second)
-				fmt.Print("\n")
-
 				webconsole.IsRestart = true
+				fmt.Print("\n")
 				runner()
 			} else {
 				logger.Info(i18n.Get("general.exiting"))
@@ -154,7 +153,6 @@ func runner() {
 func startServer(customArgs []string) {
 	logger.Info(i18n.Get("general.server.starting"))
 	webconsole.RunServer(customArgs)
-	global.NormalStatusExit = true
 }
 
 func downloadJar(urls []string, downloadType string, complete chan<- bool) {
