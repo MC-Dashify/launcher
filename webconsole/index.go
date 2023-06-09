@@ -11,8 +11,10 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/MC-Dashify/launcher/config"
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/i18n"
+	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
 	"github.com/gorilla/websocket"
 )
@@ -141,9 +143,10 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 		// h.console.Println(string(msg)) // 콘솔에 출력
 
 		// 메시지를 한 번만 처리하기 위해 다음과 같이 수정합니다.
-		h.inputChan <- string(msg)
-
-		logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.cmd.received"), "$remote", conn.RemoteAddr().String()), "$command", string(msg)))
+		if !utils.Contains(config.ConfigContent.WebConsoleDisabledCmds, string(msg)) {
+			h.inputChan <- string(msg)
+			logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.cmd.received"), "$remote", conn.RemoteAddr().String()), "$command", string(msg)))
+		}
 	}
 }
 
