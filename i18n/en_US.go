@@ -53,15 +53,15 @@ var en_US map[string]string = map[string]string{
 	"version.info":    "MC-Dashify launcher v.$version",
 
 	// WebConsole
-	"webconsole.started1":                  "+----------------------------+",
-	"webconsole.started2":                  "| WebConsole Server Started! |",
-	"webconsole.chk.valid.prev.connection": "[WebConsole] Checking Valid Previous Connections...",
-	"webconsole.restoring.prev.connection": "[WebConsole] Restoring Previous Connection: $connection",
-	"webconsole.connection.closed":         "[WebConsole] Connection Closed: $connection",
-	"webconsole.connection.closed.error":   "[WebConsole] Connection from $remote closed due to following error: $error",
+	"webconsole.started1":                       "+----------------------------+",
+	"webconsole.started2":                       "| WebConsole Server Started! |",
+	"webconsole.chk.valid.prev.connection":      "[WebConsole] Checking Valid Previous Connections...",
+	"webconsole.restoring.prev.connection":      "[WebConsole] Restoring Previous Connection: $connection",
+	"webconsole.connection.closed":              "[WebConsole] Connection Closed: $connection",
+	"webconsole.connection.closed.error":        "[WebConsole] Connection from $remote closed due to following error: $error",
 	"webconsole.connection.close.msg.send.fail": "[WebConsole] Failed to send connection close message to $remote. Error detail: $error",
-	"webconsole.connection.opened":         "[WebConsole] Connection Opened: $connection",
-	"webconsole.connection.cmd.received":   "[WebConsole] FROM $remote CMD: $command",
+	"webconsole.connection.opened":              "[WebConsole] Connection Opened: $connection",
+	"webconsole.connection.cmd.received":        "[WebConsole] FROM $remote CMD: $command",
 
 	// Config
 	"config.notfound":                "Config file not found. Creating new one...",
@@ -70,6 +70,7 @@ var en_US map[string]string = map[string]string{
 	"config.create_failed":           "Failed to create config file. Please check your permission. Error detail: $error",
 	"config.write_failed":            "Failed to write config file. Please check your permission. Error detail: $error",
 	"config.created":                 "Config file created successfully.",
+	"config.version.different":       "Config file version is different. Consider updating your config file.",
 	"config.server.empty":            "Server file path or URL is empty.",
 	"config.memory.invalid":          "Invalid memory option detected. Memory is set in GB and requires at least 2 GB. Please check the config file.",
 	"config.debug_port.invalid":      "Invalid JVM debugging port settings found. Please check the config file.",

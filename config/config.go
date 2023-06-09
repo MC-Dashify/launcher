@@ -11,50 +11,71 @@ import (
 
 var ConfigContent Config
 
-const configTemplate = `{
-  "server": "https://clip.aroxu.me/download?mc_version=1.19.4",
-  "debug": false,
-  "debug_port": 5005,
-  "restart": true,
-  "memory": 4,
-	"api_port": 8080,
-	"plugin_api_port": 8081,
-  "plugins": [
-    "https://github.com/monun/auto-reloader/releases/download/0.0.6/auto-reloader-0.0.6.jar"
-  ],
-  "jarArgs": ["nogui"]
-}`
+const configFileName = "launcher.conf.json"
+
+const (
+	defaultConfigVersion = 1
+	defaultServer        = "https://clip.aroxu.me/download?mc_version=1.19.4"
+	defaultDebug         = false
+	defaultDebugPort     = 5005
+	defaultRestart       = true
+	defaultMemory        = 2
+	defaultAPIPort       = 8080
+	defaultPluginPort    = 8081
+)
+
+var (
+	defaultPlugins                = []string{}
+	defaultJarArgs                = []string{"nogui"}
+	defaultWebConsoleDisabledCmds = []string{}
+)
 
 type Config struct {
-	Server     string   `json:"server"`
-	Debug      bool     `json:"debug"`
-	DebugPort  int      `json:"debug_port"`
-	Restart    bool     `json:"restart"`
-	Memory     int      `json:"memory"`
-	APIPort    int      `json:"api_port"`
-	PluginPort int      `json:"plugin_api_port"`
-	Plugins    []string `json:"plugins"`
-	JarArgs    []string `json:"jarArgs"`
+	ConfigVersion          int      `json:"config_version"`
+	Server                 string   `json:"server"`
+	Debug                  bool     `json:"debug"`
+	DebugPort              int      `json:"debug_port"`
+	Restart                bool     `json:"restart"`
+	Memory                 int      `json:"memory"`
+	APIPort                int      `json:"api_port"`
+	PluginPort             int      `json:"plugin_api_port"`
+	Plugins                []string `json:"plugins"`
+	JarArgs                []string `json:"jarArgs"`
+	WebConsoleDisabledCmds []string `json:"webconsole_disabled_cmds"`
 }
 
 func LoadConfig() Config {
 	var config Config
+	defaultConfig := Config{
+		ConfigVersion:          defaultConfigVersion,
+		Server:                 defaultServer,
+		Debug:                  defaultDebug,
+		DebugPort:              defaultDebugPort,
+		Restart:                defaultRestart,
+		Memory:                 defaultMemory,
+		APIPort:                defaultAPIPort,
+		PluginPort:             defaultPluginPort,
+		Plugins:                defaultPlugins,
+		JarArgs:                defaultJarArgs,
+		WebConsoleDisabledCmds: defaultWebConsoleDisabledCmds,
+	}
 	currentPath, _ := os.Getwd()
-	configPath := currentPath + "/launcher.conf.json"
+	configPath := currentPath + "/" + configFileName
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		logger.Warn(i18n.Get("config.notfound"))
-		generateConfig()
+		saveConfig(defaultConfig)
 	}
 
 	configData, loadFileErr := os.ReadFile(configPath)
 	if loadFileErr != nil {
 		logger.Error(strings.ReplaceAll(i18n.Get("config.loaderror"), "$error", loadFileErr.Error()))
 	}
+
 	if strings.TrimSpace(string(configData)) == "" {
 		logger.Error(i18n.Get("config.empty"))
-		configData = []byte(configTemplate)
-		generateConfig()
+		saveConfig(defaultConfig)
+		return defaultConfig
 	}
 
 	loadConfigErr := json.Unmarshal([]byte(configData), &config)
@@ -76,12 +97,19 @@ func LoadConfig() Config {
 		if config.Memory < 2 {
 			logger.Fatal(i18n.Get("config.memory.invalid"))
 		}
+		if config.ConfigVersion != defaultConfigVersion {
+
+			logger.Warn(i18n.Get("config.version.different"))
+
+		}
 	}
 	return config
 }
 
-func generateConfig() {
-	serverConfFile, errGenConf := os.Create("launcher.conf.json")
+func saveConfig(data Config) {
+	file, _ := json.MarshalIndent(data, "", " ")
+
+	serverConfFile, errGenConf := os.Create(configFileName)
 
 	if errGenConf != nil {
 		logger.Fatal(strings.ReplaceAll(i18n.Get("config.create_failed"), "$error", errGenConf.Error()))
@@ -89,7 +117,7 @@ func generateConfig() {
 
 	defer serverConfFile.Close()
 
-	_, errWrtConf := serverConfFile.WriteString(configTemplate)
+	_, errWrtConf := serverConfFile.Write(file)
 
 	if errWrtConf != nil {
 		logger.Fatal(strings.ReplaceAll(i18n.Get("config.write_failed"), "$error", errWrtConf.Error()))

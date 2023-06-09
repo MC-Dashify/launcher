@@ -70,6 +70,7 @@ var ko_KR map[string]string = map[string]string{
 	"config.create_failed":           "구성 설정 파일을 생성할 수 없습니다. 권한을 확인해주세요. 자세한 오류 내용은 다음과 같습니다: $error",
 	"config.write_failed":            "구성 설정 파일을 작성할 수 없습니다. 권한을 확인해주세요. 자세한 오류 내용은 다음과 같습니다: $error",
 	"config.created":                 "구성 설정 파일을 성공적으로 생성하였습니다.",
+	"config.version.different":       "구성 설정 버전이 다릅니다. 구성 설정 파일을 업데이트 할 것을 권장합니다.",
 	"config.server.empty":            "서버 파일의 경로나 URL이 비어있습니다.",
 	"config.memory.invalid":          "올바르지 않은 메모리 설정을 발견하였습니다. 메모리는 GB 단위로 설정되며, 최소 2GB 이상이 필요합니다. 구성 설정 파일을 확인해주세요.",
 	"config.debug_port.invalid":      "올바르지 않은 JVM 디버깅 포트 설정을 발견하였습니다. 구성 설정 파일을 확인해주세요.",
