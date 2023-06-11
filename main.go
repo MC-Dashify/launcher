@@ -13,9 +13,11 @@ import (
 	"github.com/MC-Dashify/launcher/config"
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/i18n"
+	"github.com/MC-Dashify/launcher/rest"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
 	"github.com/MC-Dashify/launcher/webconsole"
+	"github.com/gin-gonic/gin"
 
 	"github.com/cavaliergopher/grab/v3"
 )
@@ -65,9 +67,36 @@ func init() {
 
 func main() {
 	config.ConfigContent = config.LoadConfig()
+
+	router := gin.New()
+	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+		errorMessage := "No Error."
+		if param.ErrorMessage != "" {
+			errorMessage = param.ErrorMessage
+		}
+		logger.Info(fmt.Sprintf("[REST] [%s] | Request Method: [%s] | Request Path: [%s] | Request Protocol: [%s] | Request Status Code: [%d] | User-Agent: [%s] | Error Message: \"%s\"\n",
+			param.ClientIP,
+			param.Method,
+			param.Path,
+			param.Request.Proto,
+			param.StatusCode,
+			param.Request.UserAgent(),
+			errorMessage,
+		))
+		return ""
+	}))
+	router.Use(gin.Recovery())
+	router.Use(rest.Cors())
+
+	router.GET("/console", webconsole.HandleWebSocket)
+
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
 	webconsole.Server = &http.Server{
 		Addr:    fmt.Sprintf(":%d", config.ConfigContent.APIPort),
-		Handler: nil, // 디폴트 핸들러 사용
+		Handler: router, // gin 핸들러 사용
 	}
 	go webconsole.Server.ListenAndServe()
 

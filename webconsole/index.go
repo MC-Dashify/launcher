@@ -16,6 +16,7 @@ import (
 	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
 
@@ -103,10 +104,10 @@ func (h *WebSocketHandler) WriteCommand(command string) {
 	}
 }
 
-func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
+func HandleWebSocket(c *gin.Context) {
 	// CheckOrigin 함수를 통해 모든 원천(Origin)에서의 웹소켓 연결을 허용합니다.
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
-	conn, err := upgrader.Upgrade(w, r, nil)
+	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		logger.Error(fmt.Sprintf("%+v", err))
 		return
@@ -271,13 +272,6 @@ func StartWebsocket() {
 			close(h.disconnectCh)
 		}
 	}()
-
-	if !IsRestart {
-		http.HandleFunc("/console", HandleWebSocket)
-		http.HandleFunc("/hello", func(w http.ResponseWriter, req *http.Request) {
-			w.Write([]byte("Server is alive."))
-		})
-	}
 }
 
 func RunServerWithWebSocketHandler(arguments []string, connections []*websocket.Conn) {
