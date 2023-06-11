@@ -140,8 +140,6 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 			}
 			break
 		}
-		// h.console.Println(string(msg)) // 콘솔에 출력
-
 		// 메시지를 한 번만 처리하기 위해 다음과 같이 수정합니다.
 		if !utils.Contains(config.ConfigContent.WebConsoleDisabledCmds, string(msg)) {
 			h.inputChan <- string(msg)

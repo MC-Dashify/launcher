@@ -13,6 +13,7 @@ require (
 )
 
 require (
-	github.com/mattn/go-isatty v0.0.16 // indirect
-	golang.org/x/sys v0.5.0 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/stretchr/testify v1.8.3 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 )

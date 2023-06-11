@@ -40,7 +40,7 @@ type Config struct {
 	APIPort                int      `json:"api_port"`
 	PluginPort             int      `json:"plugin_api_port"`
 	Plugins                []string `json:"plugins"`
-	JarArgs                []string `json:"jarArgs"`
+	JarArgs                []string `json:"jar_args"`
 	WebConsoleDisabledCmds []string `json:"webconsole_disabled_cmds"`
 }
 
@@ -98,9 +98,7 @@ func LoadConfig() Config {
 			logger.Fatal(i18n.Get("config.memory.invalid"))
 		}
 		if config.ConfigVersion != defaultConfigVersion {
-
 			logger.Warn(i18n.Get("config.version.different"))
-
 		}
 	}
 	return config
