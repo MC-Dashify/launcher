@@ -179,6 +179,8 @@ func savePluginConfig(data PluginConfig) {
 	currentPath, _ := os.Getwd()
 	configPath := filepath.Join(currentPath, "plugins", "Dashify", pluginConfigFileName)
 
+	utils.CheckIsExist(filepath.Join(currentPath, "plugins", "Dashify"))
+
 	file, _ := yaml.Marshal(data)
 
 	serverConfFile, errGenConf := os.Create(configPath)

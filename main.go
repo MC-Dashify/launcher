@@ -68,6 +68,7 @@ func init() {
 func main() {
 	config.ConfigContent = config.LoadConfig()
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		errorMessage := "No Error."
