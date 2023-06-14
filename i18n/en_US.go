@@ -87,5 +87,5 @@ var en_US map[string]string = map[string]string{
 		"- All \"port-related items\" cannot use the same value.\n\n" +
 		"- The \"memory\" entry requires you to enter the amount of memory that will be allocated to the Minecraft server.\n  Must be entered in GB, minimum 2 GB.\n\n" +
 		"- The \"plugins\" entry allows you to enter the URL address of the plug-in that you want to enter with the server.\n  If you don't want to download it separately, you can leave it blank.\n\n" +
-		"- The \"jarArgs\" entry allows you to set arguments to enter the Minecraft server.\n  Where argument means an argument such as \"nogui\".\n  Arguments can be empty.",
+		"- The \"jar_args\" entry allows you to set arguments to enter the Minecraft server.\n  Where argument means an argument such as \"nogui\".\n  Arguments can be empty.",
 }

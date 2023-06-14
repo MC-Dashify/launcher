@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -10,7 +12,7 @@ import (
 	"github.com/MC-Dashify/launcher/utils/logger"
 )
 
-func CheckFolderExist(path string) {
+func CheckIsExist(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		logger.Warn(i18n.Get("file.generating.missings"))
 		Mkdir(path, 0755)
@@ -50,4 +52,36 @@ func GetLastModifiedFromLocal(path string) int64 {
 		return fileinfo.ModTime().Unix()
 	}
 	return time.Now().Unix()
+}
+
+func ReadLastNLines(n int) ([]string, error) {
+	currentPath, _ := os.Getwd()
+	logPath := filepath.Join(currentPath, "logs", "latest.log")
+
+	file, err := os.Open(logPath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	lines := []string{}
+
+	// Read all lines from the file
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	// Retrieve the last N lines
+	startIndex := len(lines) - n
+	if startIndex < 0 {
+		startIndex = 0
+	}
+	lastNLines := lines[startIndex:]
+
+	return lastNLines, nil
 }

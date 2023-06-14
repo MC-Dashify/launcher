@@ -86,19 +86,28 @@ func main() {
 		return ""
 	}))
 	router.Use(gin.Recovery())
+	router.Use(rest.Authorization())
 	router.Use(rest.Cors())
 
 	router.GET("/console", webconsole.HandleWebSocket)
-
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
+	router.GET("/ping", rest.Ping)
+	router.GET("/logs", rest.Logs)
+	router.GET("/", rest.ReverseProxy())
+	router.GET("/worlds", rest.ReverseProxy())
+	router.GET("/worlds/:uuid", rest.ReverseProxy())
+	router.GET("/players", rest.ReverseProxy())
+	router.GET("/players/:uuid", rest.ReverseProxy())
+	router.POST("/players/:uuid/kick", rest.ReverseProxy())
+	router.POST("/players/:uuid/ban", rest.ReverseProxy())
+	router.GET("/stats", rest.ReverseProxy())
 
 	webconsole.Server = &http.Server{
 		Addr:    fmt.Sprintf(":%d", config.ConfigContent.APIPort),
 		Handler: router, // gin 핸들러 사용
 	}
 	go webconsole.Server.ListenAndServe()
+
+	config.GetPluginConfig()
 
 	runner()
 	for {
@@ -200,7 +209,7 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 		}
 
 		logger.Info(strings.ReplaceAll(i18n.Get("general.checking.directory"), "$dir", downloadType))
-		utils.CheckFolderExist(serverDirectory)
+		utils.CheckIsExist(serverDirectory)
 		downloadDest = serverDirectory
 
 	} else if downloadType == "plugins" {
@@ -208,7 +217,7 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 		pluginDirectory := currentPath + "/plugins/"
 
 		logger.Info(strings.ReplaceAll(i18n.Get("general.checking.directory"), "$dir", downloadType))
-		utils.CheckFolderExist(pluginDirectory)
+		utils.CheckIsExist(pluginDirectory)
 		downloadDest = pluginDirectory
 
 	} else {

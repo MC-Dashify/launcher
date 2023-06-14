@@ -3,15 +3,19 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/MC-Dashify/launcher/i18n"
+	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
+	"gopkg.in/yaml.v3"
 )
 
 var ConfigContent Config
 
 const configFileName = "launcher.conf.json"
+const pluginConfigFileName = "config.yml"
 
 const (
 	defaultConfigVersion = 1
@@ -25,7 +29,7 @@ const (
 )
 
 var (
-	defaultPlugins                = []string{}
+	defaultPlugins                = []string{"https://github.com/MC-Dashify/plugin/releases/latest/download/dashify-plugin-all.jar"}
 	defaultJarArgs                = []string{"nogui"}
 	defaultWebConsoleDisabledCmds = []string{}
 )
@@ -44,6 +48,10 @@ type Config struct {
 	WebConsoleDisabledCmds []string `json:"webconsole_disabled_cmds"`
 }
 
+type PluginConfig struct {
+	Key string `yaml:"key"`
+}
+
 func LoadConfig() Config {
 	var config Config
 	defaultConfig := Config{
@@ -60,7 +68,7 @@ func LoadConfig() Config {
 		WebConsoleDisabledCmds: defaultWebConsoleDisabledCmds,
 	}
 	currentPath, _ := os.Getwd()
-	configPath := currentPath + "/" + configFileName
+	configPath := filepath.Join(currentPath, configFileName)
 
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		logger.Warn(i18n.Get("config.notfound"))
@@ -121,4 +129,69 @@ func saveConfig(data Config) {
 		logger.Fatal(strings.ReplaceAll(i18n.Get("config.write_failed"), "$error", errWrtConf.Error()))
 	}
 	logger.Info(i18n.Get("config.created"))
+}
+
+func GetPluginConfig() PluginConfig {
+	var pluginConfig PluginConfig
+	currentPath, _ := os.Getwd()
+	configPath := filepath.Join(currentPath, "plugins", "Dashify", pluginConfigFileName)
+
+	if _, err := os.Stat(configPath); os.IsNotExist(err) {
+		randomString := utils.GenerateRandomString(64)
+		hashedString := utils.GenerateBCryptString(randomString)
+		pluginConfig = PluginConfig{
+			Key: hashedString,
+		}
+		savePluginConfig(pluginConfig)
+	}
+
+	configData, loadFileErr := os.ReadFile(configPath)
+	if loadFileErr != nil {
+		logger.Error(loadFileErr.Error())
+	}
+
+	if strings.TrimSpace(string(configData)) == "" {
+		randomString := utils.GenerateRandomString(64)
+		hashedString := utils.GenerateBCryptString(randomString)
+		pluginConfig = PluginConfig{
+			Key: hashedString,
+		}
+		savePluginConfig(pluginConfig)
+	}
+
+	loadConfigErr := yaml.Unmarshal([]byte(configData), &pluginConfig)
+	if loadConfigErr != nil {
+		logger.Fatal(strings.ReplaceAll(i18n.Get("config.invalid"), "$error", loadConfigErr.Error()))
+	} else {
+		if pluginConfig.Key == "" {
+			randomString := utils.GenerateRandomString(64)
+			hashedString := utils.GenerateBCryptString(randomString)
+			pluginConfig = PluginConfig{
+				Key: hashedString,
+			}
+			savePluginConfig(pluginConfig)
+		}
+	}
+	return pluginConfig
+}
+
+func savePluginConfig(data PluginConfig) {
+	currentPath, _ := os.Getwd()
+	configPath := filepath.Join(currentPath, "plugins", "Dashify", pluginConfigFileName)
+
+	file, _ := yaml.Marshal(data)
+
+	serverConfFile, errGenConf := os.Create(configPath)
+
+	if errGenConf != nil {
+		logger.Fatal(errGenConf.Error())
+	}
+
+	defer serverConfFile.Close()
+
+	_, errWrtConf := serverConfFile.Write(file)
+
+	if errWrtConf != nil {
+		logger.Fatal(errWrtConf.Error())
+	}
 }
