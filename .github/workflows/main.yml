@@ -2,6 +2,8 @@ name: Build & Publish to Release
 
 on:
   push:
+    paths:
+      - "VERSION"
     branches: [main]
   workflow_dispatch:
 
