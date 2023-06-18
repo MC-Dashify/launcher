@@ -36,6 +36,7 @@ var ko_KR map[string]string = map[string]string{
 	// 인자
 	"flag.lang.desc":        "표시할 언어를 선택합니다. 인자는 'en-US' 또는 'ko-KR' 같은 형식이어야 합니다.",
 	"flag.verbose.desc":     "상세한 로그를 포함하여 출력합니다.",
+	"flag.mcorigin.desc":    "마인크래프트 수신 포트를 변경합니다. 이 옵션은 구성 설정 파일에서 트래픽 모니터링을 켜야 유효합니다.",
 	"flag.version.desc":     "MC-Dashify 실행기 버전을 보여줍니다.",
 	"flag.config.help.desc": "MC-Dashify 구성 설정 파일에 대한 도움말을 보여줍니다.",
 
@@ -47,6 +48,7 @@ var ko_KR map[string]string = map[string]string{
 	// 네트워크
 	"net.file.info.fetch.failed":      "URL에서 파일 정보를 불러오는데 실패하였습니다. 오류 정보: $error",
 	"net.file.info.time.fetch.failed": "URL에서 파일의 마지막 수정 날짜를 불러오는데 실패하였습니다. 오류 정보: $error",
+	"traffic.monitor.enabled":         "[TrafficMonitor] 트래픽 모니터링이 활성화되었습니다. 트래픽 측정을 하려면 $redirectPort 포트로 접속해주세요. 마인크래프트 서버 포트를 변경하였다면 --mcorigin 인자를 사용하여 마인크래프트 서버 포트를 변경해야 합니다. (ex: --mcorigin 25565)",
 
 	// 버전
 	"version.invalid": "버전 $version은 올바르지 않습니다.",

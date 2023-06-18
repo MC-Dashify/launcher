@@ -36,6 +36,7 @@ var en_US map[string]string = map[string]string{
 	// Flags
 	"flag.lang.desc":        "Language to disply. Value should be like 'en-US' or 'ko-KR'.",
 	"flag.verbose.desc":     "Prints all verbose logs.",
+	"flag.mcorigin.desc":    "Change Minecraft listening port. This option is valid only when traffic monitoring is enabled in config file.",
 	"flag.version.desc":     "Shows MC-Dashify launhcer version.",
 	"flag.config.help.desc": "Shows help about MC-Dashify config file.",
 
@@ -47,6 +48,7 @@ var en_US map[string]string = map[string]string{
 	// Net
 	"net.file.info.fetch.failed":      "Failed to fetch file info from url. Error detail: $error",
 	"net.file.info.time.fetch.failed": "Failed to parse last modified time of file from url. Error detail: $error",
+	"traffic.monitor.enabled":         "[TrafficMonitor] Traffic monitoring is enabled. To measure traffic, connect to the $redirectPort port. If you changed the Minecraft server port, you must change the Minecraft server port using the --mcorigin flag. (ex: --mcorigin 25565)",
 
 	// Version
 	"version.invalid": "Version $version is invalid.",

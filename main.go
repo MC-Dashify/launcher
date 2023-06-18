@@ -14,6 +14,7 @@ import (
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/rest"
+	"github.com/MC-Dashify/launcher/traffic"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
 	"github.com/MC-Dashify/launcher/webconsole"
@@ -37,6 +38,7 @@ type runtimeJar struct {
 func parseFlags() {
 	langFlag := flag.String("lang", "", i18n.Get("flag.lang.desc"))
 	verboseFlag := flag.Bool("verbose", false, i18n.Get("flag.verbose.desc"))
+	mcoriginFlag := flag.Int("mcorigin", 25565, i18n.Get("flag.mcorigin.desc"))
 	versionFlag := flag.Bool("version", false, i18n.Get("flag.version.desc"))
 	configHelpFlag := flag.Bool("config-help", false, i18n.Get("flag.config.help.desc"))
 
@@ -56,6 +58,9 @@ func parseFlags() {
 	if *verboseFlag {
 		global.IsVerbose = true
 	}
+	if (*mcoriginFlag) != 25565 {
+		global.MCOriginPort = *mcoriginFlag
+	}
 
 }
 
@@ -68,6 +73,11 @@ func init() {
 func main() {
 	config.ConfigContent = config.LoadConfig()
 
+	if config.ConfigContent.EnableTrafficMonitor {
+		logger.Info(strings.ReplaceAll(i18n.Get("traffic.monitor.enabled"), "$redirectPort", fmt.Sprint(config.ConfigContent.TrafficRedirectPort)))
+		go traffic.StartTrafficMonitor()
+	}
+
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
@@ -75,7 +85,7 @@ func main() {
 		if param.ErrorMessage != "" {
 			errorMessage = param.ErrorMessage
 		}
-		logger.Info(fmt.Sprintf("[REST] [%s] | Request Method: [%s] | Request Path: [%s] | Request Protocol: [%s] | Request Status Code: [%d] | User-Agent: [%s] | Error Message: \"%s\"\n",
+		logger.Debug(fmt.Sprintf("[REST] [%s] | Request Method: [%s] | Request Path: [%s] | Request Protocol: [%s] | Request Status Code: [%d] | User-Agent: [%s] | Error Message: \"%s\"\n",
 			param.ClientIP,
 			param.Method,
 			param.Path,
@@ -93,6 +103,8 @@ func main() {
 	router.GET("/console", webconsole.HandleWebSocket)
 	router.GET("/ping", rest.Ping)
 	router.GET("/logs", rest.Logs)
+	router.GET("/traffic", rest.Traffic)
+
 	router.GET("/", rest.ReverseProxy())
 	router.GET("/worlds", rest.ReverseProxy())
 	router.GET("/worlds/:uuid", rest.ReverseProxy())

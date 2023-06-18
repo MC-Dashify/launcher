@@ -5,12 +5,23 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/gin-gonic/gin"
 )
 
 func Ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+}
+
+func Traffic(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "traffic": global.TrafficClients})
+	global.TrafficClientsMutex.RLock()
+	for _, stats := range global.TrafficClients {
+		stats.ReceivedBytes = 0
+		stats.SentBytes = 0
+	}
+	global.TrafficClientsMutex.RUnlock()
 }
 
 func Logs(c *gin.Context) {
@@ -33,5 +44,5 @@ func Logs(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "Error reading logs", "detail": fmt.Sprintf("%v", readErr)})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"logs": logs})
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "logs": logs})
 }

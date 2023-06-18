@@ -2,6 +2,7 @@ package global
 
 import (
 	"os/exec"
+	"sync"
 )
 
 const Version = "0.0.1"
@@ -17,3 +18,13 @@ var JarArgs []string
 
 var NormalStatusExit bool = true
 var IsMCServerRunning bool = false
+
+var MCOriginPort int = 25565
+
+type TrafficClientStats struct {
+	ReceivedBytes int64
+	SentBytes     int64
+}
+
+var TrafficClients = make(map[string]*TrafficClientStats)
+var TrafficClientsMutex = sync.RWMutex{}

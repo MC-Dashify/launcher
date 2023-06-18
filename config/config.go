@@ -18,20 +18,22 @@ const configFileName = "launcher.conf.json"
 const pluginConfigFileName = "config.yml"
 
 const (
-	defaultConfigVersion = 1
-	defaultServer        = "https://clip.aroxu.me/download?mc_version=1.19.4"
-	defaultDebug         = false
-	defaultDebugPort     = 5005
-	defaultRestart       = true
-	defaultMemory        = 2
-	defaultAPIPort       = 8080
-	defaultPluginPort    = 8081
+	defaultConfigVersion        = 1
+	defaultServer               = "https://clip.aroxu.me/download?mc_version=1.19.4"
+	defaultDebug                = false
+	defaultDebugPort            = 5005
+	defaultEnableTrafficMonitor = true
+	defaultRestart              = true
+	defaultMemory               = 2
+	defaultTrafficRedirectPort  = 25565
+	defaultAPIPort              = 8080
+	defaultPluginPort           = 8081
 )
 
 var (
 	defaultPlugins                = []string{"https://github.com/MC-Dashify/plugin/releases/latest/download/dashify-plugin-all.jar"}
 	defaultJarArgs                = []string{"nogui"}
-	defaultWebConsoleDisabledCmds = []string{}
+	defaultWebConsoleDisabledCmds = []string{"stop"}
 )
 
 type Config struct {
@@ -41,6 +43,8 @@ type Config struct {
 	DebugPort              int      `json:"debug_port"`
 	Restart                bool     `json:"restart"`
 	Memory                 int      `json:"memory"`
+	EnableTrafficMonitor   bool     `json:"enable_traffic_monitor"`
+	TrafficRedirectPort    int      `json:"traffic_redirect_port"`
 	APIPort                int      `json:"api_port"`
 	PluginPort             int      `json:"plugin_api_port"`
 	Plugins                []string `json:"plugins"`
@@ -61,6 +65,7 @@ func LoadConfig() Config {
 		DebugPort:              defaultDebugPort,
 		Restart:                defaultRestart,
 		Memory:                 defaultMemory,
+		TrafficRedirectPort:    defaultTrafficRedirectPort,
 		APIPort:                defaultAPIPort,
 		PluginPort:             defaultPluginPort,
 		Plugins:                defaultPlugins,
@@ -92,6 +97,9 @@ func LoadConfig() Config {
 	} else {
 		if config.Server == "" {
 			logger.Warn(i18n.Get("config.server.empty"))
+		}
+		if config.TrafficRedirectPort <= 0 || config.TrafficRedirectPort > 65535 {
+			logger.Fatal(i18n.Get("config.api_port.invalid"))
 		}
 		if config.APIPort <= 0 || config.APIPort > 65535 {
 			logger.Fatal(i18n.Get("config.api_port.invalid"))
