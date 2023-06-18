@@ -22,11 +22,11 @@
 
 ## Code of Conduct
 
-Code of Conduct 파일을 보거나 내용을 확인하려면 [CODE_OF_CONDUCT.md](https://github.com/MC-Dashify/launcher/.github/documents/CODE_OF_CONDUCT.ko_KR.md) 파일을 확인하세요.
+Code of Conduct 파일을 보거나 내용을 확인하려면 [CODE_OF_CONDUCT.md](https://github.com/MC-Dashify/launcher/blob/main/.github/documents/CODE_OF_CONDUCT.ko_KR.md) 파일을 확인하세요.
 
 ## Contributing
 
-기여 가이드라인을 확인하려면 [CONTRIBUTING.md](https://github.com/MC-Dashify/launcher/.github/documents/CONTRIBUTING.ko_KR.md) 파일을 확인하세요.
+기여 가이드라인을 확인하려면 [CONTRIBUTING.md](https://github.com/MC-Dashify/launcher/blob/main/.github/documents/CONTRIBUTING.ko_KR.md) 파일을 확인하세요.
 
 ## License
 
