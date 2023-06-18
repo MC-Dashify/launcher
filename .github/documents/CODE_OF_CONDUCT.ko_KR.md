@@ -1,6 +1,6 @@
 # Code of Conduct
 
-<p align="center"><a href="https://github.com/MC-Dashify/launcher/CODE_OF_CONDUCT.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/.github/documents/CODE_OF_CONDUCT.ko_KR.md">한국어</a></p>
+<p align="center"><a href="https://github.com/MC-Dashify/launcher/CODE_OF_CONDUCT.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/CODE_OF_CONDUCT.ko_KR.md">한국어</a></p>
 
 우리는 개방적이고 우호적이며, 교훈적이고, 토론에 기반을 둔 그룹입니다.
 

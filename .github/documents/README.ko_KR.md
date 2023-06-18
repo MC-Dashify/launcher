@@ -7,7 +7,7 @@
   </a>
 </p>
 
-<p align="center"><a href="https://github.com/MC-Dashify/launcher/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/.github/documents/README.ko_KR.md">한국어</a></p>
+<p align="center"><a href="https://github.com/MC-Dashify/launcher/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
 
 ## 기능 목록
 
