@@ -1,0 +1,12 @@
+{
+  "[go]": {
+    "editor.formatOnSave": true
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "go.formatTool": "gofmt",
+  "go.useLanguageServer": true,
+  "go.autocompleteUnimportedPackages": true,
+  "go.testOnSave": true,
+  "go.testFlags": ["-v"],
+  "go.lintOnSave": "workspace"
+}
