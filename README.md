@@ -7,7 +7,7 @@
   </a>
 </p>
 
-<p align="center"><a href="https://github.com/MC-Dashify/launcher/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
+<p align="center"><a href="https://github.com/MC-Dashify/launcher/blob/main/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
 
 ## Features
 
@@ -22,12 +22,12 @@ To be documented later
 
 ## Code of Conduct
 
-See the [CODE_OF_CONDUCT.md](https://github.com/MC-Dashify/launcher/LICENSE) file for Code of Conduct information.
+See the [CODE_OF_CONDUCT.md](https://github.com/MC-Dashify/launcher/blob/main/CODE_OF_CONDUCT.md) file for Code of Conduct information.
 
 ## Contributing
 
-See the [CONTRIBUTING.md](https://github.com/MC-Dashify/launcher/LICENSE) file for contributing information.
+See the [CONTRIBUTING.md](https://github.com/MC-Dashify/launcher/blob/main/CONTRIBUTING.md) file for contributing information.
 
 ## License
 
-See the [LICENSE](https://github.com/MC-Dashify/launcher/LICENSE) file for licensing information.
+See the [LICENSE](https://github.com/MC-Dashify/launcher/blob/main/LICENSE) file for licensing information.

@@ -7,7 +7,7 @@
   </a>
 </p>
 
-<p align="center"><a href="https://github.com/MC-Dashify/launcher/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
+<p align="center"><a href="https://github.com/MC-Dashify/blob/main/launcher/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
 
 ## 기능 목록
 
@@ -30,4 +30,4 @@ Code of Conduct 파일을 보거나 내용을 확인하려면 [CODE_OF_CONDUCT.m
 
 ## License
 
-라이센스를 확인하려면 [LICENSE](https://github.com/MC-Dashify/launcher/LICENSE) 파일을 확인하세요.
+라이센스를 확인하려면 [LICENSE](https://github.com/MC-Dashify/launcher/blob/main/LICENSE) 파일을 확인하세요.
