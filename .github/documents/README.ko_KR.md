@@ -48,7 +48,7 @@
     <td><code>Web Socket</code></td>
     <td><code style="color:#ff8888">N/A</code></td>
     <td><code>auth_key [string]</code></td>
-    <td><code>ws://localhost:8080/console?auth_key=$2a$12$D9HthFmtK1InZIXQl8680OfDVCEdoUFF31YLgBA0QsZLFw29ugDuG</code></td>
+    <td><code>ws://localhost:8080/console?auth_key=your_key_here</code></td>
     <td><code style="color:#ff8888">N/A</code></td>
   </tr>
   <tr>
