@@ -66,7 +66,7 @@
     <td><code>HTTP</code></td>
     <td><code style="color:#6bdd9a">GET</code></td>
     <td><code>lines [int]</code></td>
-    <td><code>http://localhost:8080/logs</code></td>
+    <td><code>http://localhost:8080/logs?lines=100</code></td>
     <td>Parameter <code style="color:#cc00cc">line</code> should a valid int between <code>1</code> and <code>1000</code></td>
   </tr>
   <tr>

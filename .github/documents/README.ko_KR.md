@@ -66,7 +66,7 @@
     <td><code>HTTP</code></td>
     <td><code style="color:#6bdd9a">GET</code></td>
     <td><code>lines [int]</code></td>
-    <td><code>http://localhost:8080/logs</code></td>
+    <td><code>http://localhost:8080/logs?lines=100</code></td>
     <td>파라미터 <code style="color:#cc00cc">line</code>은 반드시<code>1</code>부터 <code>1000</code> 사이의 유효한 정수이어야 합니다.</td>
   </tr>
   <tr>
