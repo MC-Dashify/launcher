@@ -11,14 +11,77 @@
 
 ## Features
 
-- To be documented later
+- Real-time console access
+- Real-time log monitoring
+- Monitoring Host Resources
+- Monitor the number and distribution of player connectors
+- Kick or ban players
+- Monitoring World Information
+- Check the list of players in the world
+- Monitoring the number of entities and chunks loaded in the world
+- Measure file size by world
 - Traffic measurement`(Alpha)`
   - Traffic measurement is still in alpha phase. Known issues:
     - The IP of the connection and the IP that the Minecraft Server recognizes can be different.
 
 ## API Endpoint
 
-To be documented later
+- NOTE: All HTTP requests requires `Authorization` header like `Bearer your_key_here`.
+  > Key information can be found in the file `Dashify/config.yml` in the server plugin folder.
+
+<table>
+<thead>
+  <tr>
+    <th>Path</th>
+    <th>Description</th>
+    <th>Protocol</th>
+    <th>Request Method</th>
+    <th>Required Params</th>
+    <th>Request Example</th>
+    <th>Note</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><code>/console</code></td>
+    <td>Connect to Console's I/O Directly</td>
+    <td><code>Web Socket</code></td>
+    <td><code style="color:#ff8888">N/A</code></td>
+    <td><code>auth_key [string]</code></td>
+    <td><code>ws://localhost:8080/console?auth_key=$2a$12$D9HthFmtK1InZIXQl8680OfDVCEdoUFF31YLgBA0QsZLFw29ugDuG</code></td>
+    <td><code style="color:#ff8888">N/A</code></td>
+  </tr>
+  <tr>
+    <td><code>/ping</code></td>
+    <td>Ping the server</td>
+    <td><code>HTTP</code></td>
+    <td><code style="color:#6bdd9a">GET</code></td>
+    <td><code style="color:#ff8888">N/A</code></td>
+    <td><code>http://localhost:8080/ping</code></td>
+    <td><code style="color:#ff8888">N/A</code></td>
+  </tr>
+  <tr>
+    <td><code>/logs</code></td>
+    <td>Get Minecraft server's logs</td>
+    <td><code>HTTP</code></td>
+    <td><code style="color:#6bdd9a">GET</code></td>
+    <td><code>lines [int]</code></td>
+    <td><code>http://localhost:8080/logs</code></td>
+    <td>Parameter <code style="color:#cc00cc">line</code> should a valid int between <code>1</code> and <code>1000</code></td>
+  </tr>
+  <tr>
+    <td><code>/traffic</code></td>
+    <td>Get Minecraft server's traffic information</td>
+    <td><code>HTTP</code></td>
+    <td><code style="color:#6bdd9a">GET</code></td>
+    <td><code style="color:#ff8888">N/A</code></td>
+    <td><code>http://localhost:8080/traffic</code></td>
+    <td>Server keeps count traffic information until request have received. After respond, traffic will be reset (Recount after request)</td>
+  </tr>
+</tbody>
+</table>
+
+Other endpoints are ReverseProxyed. They are documented at [plugin](https://github.com/MC-Dashify/plugin) repository. Just remember that port number have to same with launcher's port number.
 
 ## Code of Conduct
 
