@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/MC-Dashify/launcher/config"
 	"github.com/MC-Dashify/launcher/global"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/gin-gonic/gin"
@@ -15,13 +16,17 @@ func Ping(c *gin.Context) {
 }
 
 func Traffic(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "ok", "traffic": global.TrafficClients})
-	global.TrafficClientsMutex.RLock()
-	for _, stats := range global.TrafficClients {
-		stats.ReceivedBytes = 0
-		stats.SentBytes = 0
+	if config.ConfigContent.EnableTrafficMonitor {
+		c.JSON(http.StatusOK, gin.H{"status": "ok", "traffic": global.TrafficClients})
+		global.TrafficClientsMutex.RLock()
+		for _, stats := range global.TrafficClients {
+			stats.ReceivedBytes = 0
+			stats.SentBytes = 0
+		}
+		global.TrafficClientsMutex.RUnlock()
+	} else {
+		c.JSON(http.StatusNoContent, gin.H{"status": "error", "message": "Traffic monitor is disabled"})
 	}
-	global.TrafficClientsMutex.RUnlock()
 }
 
 func Logs(c *gin.Context) {
