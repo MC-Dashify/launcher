@@ -1,3 +1,6 @@
+<p align="center">
+  <img width="128" align="center" src="https://github.com/MC-Dashify/launcher/blob/main/.github/assets/logo-512.png">
+</p>
 <h1 align="center">Dashify</h1>
 <h3 align="center">Easily and quickly monitor Minecraft servers</h3>
 <p align="center">Standalone monitoring system without any additional installation</p>

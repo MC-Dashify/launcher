@@ -1,3 +1,6 @@
+<p align="center">
+  <img width="128" align="center" src="https://github.com/MC-Dashify/launcher/blob/main/.github/assets/logo-512.png">
+</p>
 <h1 align="center">Dashify</h1>
 <h3 align="center">Minecraft 서버 모니터링을 쉽고 빠르게</h3>
 <p align="center">별도의 설치 없이 실행되는 Standalone 모니터링 시스템</p>
