@@ -27,6 +27,10 @@
   - Traffic measurement is still in alpha phase. Known issues:
     - The IP of the connection and the IP that the Minecraft Server recognizes can be different.
 
+## Configuration
+
+Please refer to [this](https://github.com/MC-Dashify/launcher/blob/main/.github/documents/CONFIG_GUIDE.md).
+
 ## API Endpoint
 
 - NOTE: All HTTP requests requires `Authorization` header like `Bearer your_key_here`.

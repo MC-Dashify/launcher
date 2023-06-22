@@ -27,6 +27,10 @@
   - 트래픽 측정은 아직 알파 단계 입니다. 알려진 문제 사항은 다음과 같습니다.
     - 접속자의 IP와 Minecraft Server가 인지하는 IP가 서로 상이할 수 있습니다.
 
+## 구성 설정
+
+[여기](https://github.com/MC-Dashify/launcher/blob/main/.github/documents/CONFIG_GUIDE.ko_KR.md)를 참고해주세요.
+
 ## API Endpoint
 
 - 참고: 모든 HTTP 요청에는 `Authorization` 헤더에 `Bearer your_key_here` 와 같은 형식의 토큰 인증이 필요합니다.
