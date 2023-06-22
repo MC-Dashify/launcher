@@ -9,8 +9,8 @@ The configuration settings file is created in JSON format and is automatically g
 <table>
 <thead>
   <tr>
-    <th>key</th>
-    <th>value</th>
+    <th>Key</th>
+    <th>Description</th>
     <th>Default Value</th>
     <th>Note</th>
   </tr>
