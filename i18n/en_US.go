@@ -78,16 +78,4 @@ var en_US map[string]string = map[string]string{
 	"config.debug_port.invalid":      "Invalid JVM debugging port settings found. Please check the config file.",
 	"config.api_port.invalid":        "Invalid API port. Please check your config file.",
 	"config.plugin_api_port.invalid": "Invalid Plugin API port. Please check your config file.",
-	"config.help": "MC-Dashify Launcher config file manual.\n\n" +
-		"- For the \"server\" entry, you must enter the URL of the server file beginning with \"http://\" or \"https://\", or the local path beginning with \"file://\".\n" +
-		"  If you run using a local file using file://, you must enter the full path.\n\n" +
-		"- In the \"debug\" entry, you must enter bool value whether to enable JVM debug mode for development.\n\n" +
-		"- In the \"debug_port\" entry, you must enter the port to be used for JVM debug mode for development.\n" +
-		"  This option is ignored if the \"debug\" entry is set to false.\n\n" +
-		"- In the \"api_port\" entry, you must enter the port of the API server on which the server will communicate.\n\n" +
-		"- The \"plugin_api_port\" entry requires you to enter the port on the API server to communicate with the MC-Dashify plug-in.\n\n" +
-		"- All \"port-related items\" cannot use the same value.\n\n" +
-		"- The \"memory\" entry requires you to enter the amount of memory that will be allocated to the Minecraft server.\n  Must be entered in GB, minimum 2 GB.\n\n" +
-		"- The \"plugins\" entry allows you to enter the URL address of the plug-in that you want to enter with the server.\n  If you don't want to download it separately, you can leave it blank.\n\n" +
-		"- The \"jar_args\" entry allows you to set arguments to enter the Minecraft server.\n  Where argument means an argument such as \"nogui\".\n  Arguments can be empty.",
 }

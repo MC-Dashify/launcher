@@ -40,7 +40,6 @@ func parseFlags() {
 	verboseFlag := flag.Bool("verbose", false, i18n.Get("flag.verbose.desc"))
 	mcoriginFlag := flag.Int("mcorigin", 25565, i18n.Get("flag.mcorigin.desc"))
 	versionFlag := flag.Bool("version", false, i18n.Get("flag.version.desc"))
-	configHelpFlag := flag.Bool("config-help", false, i18n.Get("flag.config.help.desc"))
 
 	flag.Parse()
 	if (*langFlag) != "" {
@@ -49,10 +48,6 @@ func parseFlags() {
 	}
 	if *versionFlag {
 		logger.Info(strings.ReplaceAll(i18n.Get("version.info"), "$version", global.Version))
-		os.Exit(0)
-	}
-	if *configHelpFlag {
-		logger.Info(i18n.Get("config.help"))
 		os.Exit(0)
 	}
 	if *verboseFlag {
