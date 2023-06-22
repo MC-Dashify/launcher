@@ -76,7 +76,9 @@ func StartTrafficMonitor() {
 					break
 				}
 
-				stats.ReceivedBytes += int64(n)
+				if !((stats.ReceivedBytes + int64(n)) > 9223372036854700000) {
+					stats.ReceivedBytes += int64(n)
+				}
 			}
 
 			clientConn.Close()
@@ -105,7 +107,9 @@ func StartTrafficMonitor() {
 					break
 				}
 
-				stats.SentBytes += int64(n)
+				if !((stats.SentBytes + int64(n)) > 9223372036854700000) {
+					stats.SentBytes += int64(n)
+				}
 			}
 
 			clientConn.Close()
