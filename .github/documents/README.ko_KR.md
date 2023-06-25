@@ -12,20 +12,7 @@
 
 <p align="center"><a href="https://github.com/MC-Dashify/launcher/blob/main/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
 
-## 기능 목록
-
-- 실시간 콘솔 접속
-- 실시간 로그 모니터링
-- 호스트 자원 모니터링
-- 플레이어 접속자 수 및 분포 모니터링
-- 플레이어 추방 또는 차단
-- 월드 정보 모니터링
-- 월드에 있는 플레이어 목록 확인
-- 월드에 있는 엔티티 및 로드된 청크 수 확인
-- 월드별 용량 측정
-- 트래픽 측정`(Alpha)`
-  - 트래픽 측정은 아직 알파 단계 입니다. 알려진 문제 사항은 다음과 같습니다.
-    - 접속자의 IP와 Minecraft Server가 인지하는 IP가 서로 상이할 수 있습니다.
+<h1 align="center">이 레포지토리는 Dashify의 launcher 레포지토리 입니다.</h1>
 
 ## 구성 설정
 

@@ -12,20 +12,7 @@
 
 <p align="center"><a href="https://github.com/MC-Dashify/launcher/blob/main/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
 
-## Features
-
-- Real-time console access
-- Real-time log monitoring
-- Monitoring Host Resources
-- Monitor the number and distribution of player connectors
-- Kick or ban players
-- Monitoring World Information
-- Check the list of players in the world
-- Monitoring the number of entities and chunks loaded in the world
-- Measure file size by world
-- Traffic measurement`(Alpha)`
-  - Traffic measurement is still in alpha phase. Known issues:
-    - The IP of the connection and the IP that the Minecraft Server recognizes can be different.
+<h1 align="center">THIS IS LAUNCHER REPOSITORY FOR DASHIFY.</h1>
 
 ## Configuration
 
