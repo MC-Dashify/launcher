@@ -5,6 +5,9 @@
 <h3 align="center">Easily and quickly monitor Minecraft servers</h3>
 <p align="center">Standalone monitoring system without any additional installation</p>
 <p align="center">
+  <a href="https://github.com/MC-Dashify/launcher/actions/workflows/codeql.yml">
+    <img src="https://github.com/MC-Dashify/launcher/actions/workflows/codeql.yml/badge.svg" alt="CodeQL" />
+  </a>
   <a href="https://github.com/MC-Dashify/launcher/actions/workflows/main.yml">
     <img src="https://github.com/MC-Dashify/launcher/actions/workflows/main.yml/badge.svg" alt="Build & Publish to Release" />
   </a>
