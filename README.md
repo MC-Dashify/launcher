@@ -8,6 +8,7 @@
   <a href="https://github.com/MC-Dashify/launcher/actions/workflows/main.yml">
     <img src="https://github.com/MC-Dashify/launcher/actions/workflows/main.yml/badge.svg" alt="Build & Publish to Release" />
   </a>
+  <a href="https://app.codacy.com/gh/MC-Dashify/launcher/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade"><img src="https://app.codacy.com/project/badge/Grade/bf744aecc0c44413914e2fcecda263f0" alt="code quality"/></a>
 </p>
 
 <p align="center"><a href="https://github.com/MC-Dashify/launcher/blob/main/README.md">English</a> · <a href="https://github.com/MC-Dashify/launcher/blob/main/.github/documents/README.ko_KR.md">한국어</a></p>
