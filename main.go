@@ -92,8 +92,8 @@ func main() {
 		return ""
 	}))
 	router.Use(gin.Recovery())
-	router.Use(rest.Authorization())
 	router.Use(rest.Cors())
+	router.Use(rest.Authorization())
 
 	router.GET("/console", webconsole.HandleWebSocket)
 	router.GET("/ping", rest.Ping)
