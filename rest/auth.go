@@ -15,8 +15,7 @@ func Authorization() gin.HandlerFunc {
 			if websocketAuth == config.GetPluginConfig().Key {
 				c.Next()
 			} else {
-				c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
-				c.Abort()
+				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
 			}
 			return
 		}
@@ -24,8 +23,7 @@ func Authorization() gin.HandlerFunc {
 		if authKey == fmt.Sprintf("Bearer %s", config.GetPluginConfig().Key) {
 			c.Next()
 		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"status": "unauthorized"})
 		}
 	}
 }
