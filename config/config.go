@@ -53,7 +53,8 @@ type Config struct {
 }
 
 type PluginConfig struct {
-	Key string `yaml:"key"`
+	Key     string `yaml:"key"`
+	Enabled bool   `yaml:"enabled"`
 }
 
 func LoadConfig() Config {
