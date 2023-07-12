@@ -59,7 +59,7 @@ The configuration settings file is created in JSON format and is automatically g
     <td><span style="color:#ff8888">The feature is still an alpha state. See the README.MD file for a list of known issues.</span></td>
   </tr>
   <tr>
-    <td><code>enable_traffic_monitor</code></td>
+    <td><code>traffic_redirect_port</code></td>
     <td>You must redirect the port to use the Server Traffic Measurement feature. Set the port to use when redirecting.</td>
     <td><code>25555</code></td>
     <td><span style="color:#ff8888">The feature is still an alpha state. See the README.MD file for a list of known issues. If the <code>enable_traffic_monitor</code> option is turned off, this option is ignored.</span></td>

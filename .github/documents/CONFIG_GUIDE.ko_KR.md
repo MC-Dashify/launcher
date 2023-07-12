@@ -59,7 +59,7 @@
     <td><span style="color:#ff8888">해당 기능은 아직 alpha 기능입니다. README.MD 파일을 참고하여 알려진 이슈 목록을 확인하세요.</span></td>
   </tr>
   <tr>
-    <td><code>enable_traffic_monitor</code></td>
+    <td><code>traffic_redirect_port</code></td>
     <td>서버 트래픽 측정 기능을 사용하려면 포트를 리다이렉트 해야 합니다. 리다이렉트 할 때 사용할 포트를 설정합니다.</td>
     <td><code>25555</code></td>
     <td><span style="color:#ff8888">해당 기능은 아직 alpha 기능입니다. README.MD 파일을 참고하여 알려진 이슈 목록을 확인하세요. <code>enable_traffic_monitor</code> 옵션이 꺼져있을 경우 이 옵션은 무시됩니다.</span></td>
