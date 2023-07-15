@@ -71,6 +71,7 @@ func main() {
 	if config.ConfigContent.EnableTrafficMonitor {
 		logger.Info(strings.ReplaceAll(i18n.Get("traffic.monitor.enabled"), "$redirectPort", fmt.Sprint(config.ConfigContent.TrafficRedirectPort)))
 		go traffic.StartTrafficMonitor()
+		time.Sleep(5 * time.Second)
 	}
 
 	gin.SetMode(gin.ReleaseMode)

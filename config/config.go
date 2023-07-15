@@ -19,13 +19,13 @@ const pluginConfigFileName = "config.yml"
 
 const (
 	defaultConfigVersion        = 1
-	defaultServer               = "https://clip.aroxu.me/download?mc_version=1.19.4"
+	defaultServer               = "https://clip.aroxu.me/download?mc_version=1.20.1"
 	defaultDebug                = false
 	defaultDebugPort            = 5005
 	defaultEnableTrafficMonitor = true
 	defaultRestart              = true
 	defaultMemory               = 2
-	defaultTrafficRedirectPort  = 25565
+	defaultTrafficRedirectPort  = 25555
 	defaultAPIPort              = 8080
 	defaultPluginPort           = 8081
 )
