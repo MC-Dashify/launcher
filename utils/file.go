@@ -3,6 +3,8 @@ package utils
 import (
 	"bufio"
 	"fmt"
+	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -84,4 +86,13 @@ func ReadLastNLines(n int) ([]string, error) {
 	lastNLines := lines[startIndex:]
 
 	return lastNLines, nil
+}
+
+func FilenameFromUrl(urlstr string) string {
+	u, err := url.Parse(urlstr)
+	if err != nil {
+		log.Fatal("Error due to parsing url: ", err)
+	}
+	x, _ := url.QueryUnescape(u.EscapedPath())
+	return filepath.Base(x)
 }
