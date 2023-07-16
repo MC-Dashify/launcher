@@ -137,7 +137,7 @@ func HandleWebSocket(c *gin.Context) {
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway, websocket.CloseMessage, websocket.CloseNoStatusReceived) {
-				logger.Error(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.closed.error"), "$connection", conn.RemoteAddr().String()), "$error", err.Error()))
+				logger.Error(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("webconsole.connection.closed.error"), "$remote", conn.RemoteAddr().String()), "$error", err.Error()))
 			}
 			break
 		}
