@@ -253,6 +253,16 @@ func downloadJar(urls []string, downloadType string, complete chan<- bool) {
 	complete <- true
 }
 
+func connectivityCheck() (ok bool) {
+	req, err := http.Get("https://connectivitycheck.gstatic.com/generate_204")
+	if err != nil {
+		return false
+	}
+	defer req.Body.Close()
+
+	return true
+}
+
 func downloadFile(downloadType, downloadDir, url string, err chan<- downloadResult) {
 	if downloadType == "server" && !utils.IsValidUrl(url) {
 		err <- downloadResult{file: url, dlerr: nil}
