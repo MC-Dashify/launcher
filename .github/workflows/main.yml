@@ -3,7 +3,7 @@ name: Build & Publish to Release
 on:
   push:
     paths:
-      - "VERSION"
+      - "/global/version.go"
     branches: [main]
   workflow_dispatch:
 

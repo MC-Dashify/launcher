@@ -48,7 +48,7 @@ func parseFlags() {
 		global.ForcedLanguage = *langFlag
 	}
 	if *versionFlag {
-		logger.Info(strings.ReplaceAll(i18n.Get("version.info"), "$version", global.Version))
+		logger.Info(strings.ReplaceAll(i18n.Get("version.info"), "$version", global.VERSION))
 		os.Exit(0)
 	}
 	if *verboseFlag {
