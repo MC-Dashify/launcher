@@ -150,6 +150,7 @@ func GetPluginConfig() PluginConfig {
 		hashedString := utils.GenerateBCryptString(randomString)
 		pluginConfig = PluginConfig{
 			Key: hashedString,
+			Enabled: true,
 		}
 		savePluginConfig(pluginConfig)
 	}
