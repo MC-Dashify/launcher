@@ -22,7 +22,7 @@ const (
 	defaultServer               = "https://clip.aroxu.me/download?mc_version=1.20.1"
 	defaultDebug                = false
 	defaultDebugPort            = 5005
-	defaultEnableTrafficMonitor = true
+	defaultEnableTrafficMonitor = false
 	defaultRestart              = true
 	defaultMemory               = 2
 	defaultTrafficRedirectPort  = 25555
