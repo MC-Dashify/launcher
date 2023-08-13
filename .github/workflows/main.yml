@@ -16,8 +16,12 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.20'
+          go-version: "1.20"
       - run: go version && go env
+
+      - run: mkdir -p .env && echo "$SENTRY_DSN" >> .env/sentryDSN
+        env:
+          SENTRY_DSN: ${{secrets.SENTRY_DSN}}
 
       - name: Install Dependency
         run: go get

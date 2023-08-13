@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"flag"
 	"fmt"
 	"net/http"
@@ -19,10 +20,15 @@ import (
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
 	"github.com/MC-Dashify/launcher/webconsole"
+	"github.com/getsentry/sentry-go"
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 
 	"github.com/cavaliergopher/grab/v3"
 )
+
+//go:embed .env/sentryDSN
+var sentryDSN string
 
 var serverFilePath string
 
@@ -76,7 +82,22 @@ func main() {
 	}
 
 	gin.SetMode(gin.ReleaseMode)
+
+	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
+	if err := sentry.Init(sentry.ClientOptions{
+		Dsn:           sentryDSN,
+		EnableTracing: true,
+		// Set TracesSampleRate to 1.0 to capture 100%
+		// of transactions for performance monitoring.
+		// We recommend adjusting this value in production,
+		TracesSampleRate: 1.0,
+	}); err != nil {
+		logger.Warn(fmt.Sprintf("Sentry initialization failed: %v", err))
+	}
+
 	router := gin.New()
+	router.Use(sentrygin.New(sentrygin.Options{}))
+
 	router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		errorMessage := "No Error."
 		if param.ErrorMessage != "" {

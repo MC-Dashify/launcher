@@ -1,3 +1,4 @@
 launcher.exe
 launcher.conf.json
 .server
+.env/sentryDSN

@@ -7,9 +7,12 @@ require github.com/mattn/go-colorable v0.1.13
 require github.com/cavaliergopher/grab/v3 v3.0.1
 
 require (
+	github.com/getsentry/sentry-go v0.23.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/jeandeaual/go-locale v0.0.0-20220711133428-7de61946b173
 	github.com/sirupsen/logrus v1.9.2
+	golang.org/x/crypto v0.9.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -30,16 +33,13 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/stretchr/testify v1.8.3 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 )
