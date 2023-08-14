@@ -129,6 +129,7 @@ func main() {
 	router.GET("/worlds/:uuid", rest.ReverseProxy())
 	router.GET("/players", rest.ReverseProxy())
 	router.GET("/players/:uuid", rest.ReverseProxy())
+	router.GET("/players/bans", rest.ReverseProxy())
 	router.POST("/players/:uuid/kick", rest.ReverseProxy())
 	router.POST("/players/:uuid/ban", rest.ReverseProxy())
 	router.GET("/stats", rest.ReverseProxy())
