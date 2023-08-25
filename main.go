@@ -82,6 +82,7 @@ func main() {
 	}
 
 	gin.SetMode(gin.ReleaseMode)
+	sentryDSN = strings.TrimSpace(strings.ReplaceAll(sentryDSN, "\n", ""))
 
 	// To initialize Sentry's handler, you need to initialize Sentry itself beforehand
 	if err := sentry.Init(sentry.ClientOptions{
