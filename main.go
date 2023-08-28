@@ -133,6 +133,7 @@ func main() {
 	router.GET("/players/bans", rest.ReverseProxy())
 	router.POST("/players/:uuid/kick", rest.ReverseProxy())
 	router.POST("/players/:uuid/ban", rest.ReverseProxy())
+	router.POST("/players/:uuid/pardon", rest.ReverseProxy())
 	router.GET("/stats", rest.ReverseProxy())
 
 	webconsole.Server = &http.Server{
