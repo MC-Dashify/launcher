@@ -293,6 +293,7 @@ func downloadFile(downloadType, downloadDir, url string, err chan<- downloadResu
 	}
 
 	client := grab.NewClient()
+	client.UserAgent = fmt.Sprintf("MC-Dashify/%s", global.VERSION)
 	req, _ := grab.NewRequest(downloadDir, url)
 	if connectivityCheck() {
 		os.Remove(path.Join(downloadDir, utils.FilenameFromUrl(url)))
