@@ -29,17 +29,17 @@ jobs:
       - name: Create Build Directory
         run: mkdir build
 
-      - name: Build for Darwin x64
-        run: CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a -o build/launcher_darwin_x64
+      - name: Build for Darwin amd64
+        run: CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -a -o build/launcher_darwin_amd64
 
       - name: Build for Darwin arm64
         run: CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -a -o build/launcher_darwin_arm64
 
-      - name: Build for Linux x86
-        run: CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -a -o build/launcher_linux_x86
+      - name: Build for Linux 386
+        run: CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -a -o build/launcher_linux_386
 
-      - name: Build for Linux x64
-        run: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o build/launcher_linux_x64
+      - name: Build for Linux amd64
+        run: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o build/launcher_linux_amd64
 
       - name: Build for Linux arm
         run: CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -a -o build/launcher_linux_arm
@@ -47,11 +47,11 @@ jobs:
       - name: Build for Linux arm64
         run: CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -o build/launcher_linux_arm64
 
-      - name: Build for Windows x64
-        run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -a -o build/launcher_windows_x64.exe
+      - name: Build for Windows amd64
+        run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -a -o build/launcher_windows_amd64.exe
 
-      - name: Build for Windows x86
-        run: CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -a -o build/launcher_windows_x86.exe
+      - name: Build for Windows 386
+        run: CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -a -o build/launcher_windows_386.exe
 
       - name: Build for Windows arm64
         run: CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -a -o build/launcher_windows_arm64.exe
@@ -59,17 +59,17 @@ jobs:
       - name: Check Files
         run: ls -al . && ls -al build/
 
-      - name: Zip Build file for Darwin x64
-        run: mv build/launcher_darwin_x64 ./launcher && zip launcher_darwin_x64.zip launcher && rm -rf launcher
+      - name: Zip Build file for Darwin amd64
+        run: mv build/launcher_darwin_amd64 ./launcher && zip launcher_darwin_amd64.zip launcher && rm -rf launcher
 
       - name: Zip Build file for Darwin arm64
         run: mv build/launcher_darwin_arm64 ./launcher && zip launcher_darwin_arm64.zip launcher && rm -rf launcher
 
-      - name: Zip Build file for Linux x86
-        run: mv build/launcher_linux_x86 ./launcher && zip launcher_linux_x86.zip launcher && rm -rf launcher
+      - name: Zip Build file for Linux 386
+        run: mv build/launcher_linux_386 ./launcher && zip launcher_linux_386.zip launcher && rm -rf launcher
 
-      - name: Zip Build file for Linux x64
-        run: mv build/launcher_linux_x64 ./launcher && zip launcher_linux_x64.zip launcher && rm -rf launcher
+      - name: Zip Build file for Linux amd64
+        run: mv build/launcher_linux_amd64 ./launcher && zip launcher_linux_amd64.zip launcher && rm -rf launcher
 
       - name: Zip Build file for Linux arm
         run: mv build/launcher_linux_arm ./launcher && zip launcher_linux_arm.zip launcher && rm -rf launcher
@@ -77,21 +77,21 @@ jobs:
       - name: Zip Build file for Linux arm64
         run: mv build/launcher_linux_arm64 ./launcher && zip launcher_linux_arm64.zip launcher && rm -rf launcher
 
-      - name: Zip Build file for Windows x64
-        run: mv build/launcher_windows_x64.exe ./launcher.exe && zip launcher_windows_x64.exe.zip launcher.exe && rm -rf launcher.exe
+      - name: Zip Build file for Windows amd64
+        run: mv build/launcher_windows_amd64.exe ./launcher.exe && zip launcher_windows_amd64.exe.zip launcher.exe && rm -rf launcher.exe
 
-      - name: Zip Build file for Windows x86
-        run: mv build/launcher_windows_x86.exe ./launcher.exe && zip launcher_windows_x86.exe.zip launcher.exe && rm -rf launcher.exe
+      - name: Zip Build file for Windows 386
+        run: mv build/launcher_windows_386.exe ./launcher.exe && zip launcher_windows_386.exe.zip launcher.exe && rm -rf launcher.exe
 
       - name: Zip Build file for Windows arm64
         run: mv build/launcher_windows_arm64.exe ./launcher.exe && zip launcher_windows_arm64.exe.zip launcher.exe && rm -rf launcher.exe
 
       - name: Set Version
-        run: echo "::set-output name=version::$(echo ${{ github.sha }} | cut -c -6)"
+        run: echo "::set-output name=version::v$(cat global/VERSION)"
         id: version
 
       - name: Set Release Name
-        run: echo "::set-output name=release_name::$(echo ${{ github.sha }} | cut -c -6)"
+        run: echo "::set-output name=release_name::v$(cat global/VERSION)"
         id: release_name
 
       - uses: actions/create-release@v1
@@ -104,14 +104,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Darwin x64 Artifact
+      - name: Upload Darwin amd64 Artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: launcher_darwin_x64.zip
-          asset_name: launcher_darwin_x64.zip
+          asset_path: launcher_darwin_amd64.zip
+          asset_name: launcher_darwin_amd64.zip
           asset_content_type: application/zip
 
       - name: Upload Darwin arm64 Artifact
@@ -124,24 +124,24 @@ jobs:
           asset_name: launcher_darwin_arm64.zip
           asset_content_type: application/zip
 
-      - name: Upload Linux x86 Artifact
+      - name: Upload Linux 386 Artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: launcher_linux_x86.zip
-          asset_name: launcher_linux_x86.zip
+          asset_path: launcher_linux_386.zip
+          asset_name: launcher_linux_386.zip
           asset_content_type: application/zip
 
-      - name: Upload Linux x64 Artifact
+      - name: Upload Linux amd64 Artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: launcher_linux_x64.zip
-          asset_name: launcher_linux_x64.zip
+          asset_path: launcher_linux_amd64.zip
+          asset_name: launcher_linux_amd64.zip
           asset_content_type: application/zip
 
       - name: Upload Linux arm Artifact
@@ -164,24 +164,24 @@ jobs:
           asset_name: launcher_linux_arm64.zip
           asset_content_type: application/zip
 
-      - name: Upload Windows x64 Artifact
+      - name: Upload Windows amd64 Artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: launcher_windows_x64.exe.zip
-          asset_name: launcher_windows_x64.exe.zip
+          asset_path: launcher_windows_amd64.exe.zip
+          asset_name: launcher_windows_amd64.exe.zip
           asset_content_type: application/zip
 
-      - name: Upload Windows x86 Artifact
+      - name: Upload Windows 386 Artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: launcher_windows_x86.exe.zip
-          asset_name: launcher_windows_x86.exe.zip
+          asset_path: launcher_windows_386.exe.zip
+          asset_name: launcher_windows_386.exe.zip
           asset_content_type: application/zip
 
       - name: Upload Windows arm64 Artifact
