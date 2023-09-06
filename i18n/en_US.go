@@ -78,4 +78,14 @@ var en_US map[string]string = map[string]string{
 	"config.debug_port.invalid":      "Invalid JVM debugging port settings found. Please check the config file.",
 	"config.api_port.invalid":        "Invalid API port. Please check your config file.",
 	"config.plugin_api_port.invalid": "Invalid Plugin API port. Please check your config file.",
+
+	// Updater
+	"updater.checking":                 "Checking for updates...",
+	"updater.up.to.date":               "Up to date!",
+	"updater.new.version.found":        "New version found! Updating...",
+	"updater.update.failed":            "Failed to update. Error detail: $error",
+	"updater.update.success":           "Successfully updated to v.$version",
+	"updater.restart.to.apply":         "Please restart to apply update.",
+	"updater.version.fetch.failed":     "Failed to fetch latest version. Error detail: $error",
+	"updater.executable.path.notfound": "Could not locate executable path.",
 }

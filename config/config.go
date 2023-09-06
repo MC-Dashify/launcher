@@ -28,6 +28,7 @@ const (
 	defaultTrafficRedirectPort  = 25555
 	defaultAPIPort              = 8080
 	defaultPluginPort           = 8081
+	defaultAutoUpdate           = true
 )
 
 var (
@@ -45,6 +46,7 @@ type Config struct {
 	Memory                 int      `json:"memory"`
 	EnableTrafficMonitor   bool     `json:"enable_traffic_monitor"`
 	TrafficRedirectPort    int      `json:"traffic_redirect_port"`
+	AutoUpdate             bool     `json:"auto_update"`
 	APIPort                int      `json:"api_port"`
 	PluginPort             int      `json:"plugin_api_port"`
 	Plugins                []string `json:"plugins"`
@@ -67,6 +69,7 @@ func LoadConfig() Config {
 		Restart:                defaultRestart,
 		Memory:                 defaultMemory,
 		TrafficRedirectPort:    defaultTrafficRedirectPort,
+		AutoUpdate:             defaultAutoUpdate,
 		APIPort:                defaultAPIPort,
 		PluginPort:             defaultPluginPort,
 		Plugins:                defaultPlugins,
@@ -149,7 +152,7 @@ func GetPluginConfig() PluginConfig {
 		randomString := utils.GenerateRandomString(64)
 		hashedString := utils.GenerateBCryptString(randomString)
 		pluginConfig = PluginConfig{
-			Key: hashedString,
+			Key:     hashedString,
 			Enabled: true,
 		}
 		savePluginConfig(pluginConfig)

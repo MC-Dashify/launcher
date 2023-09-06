@@ -78,4 +78,14 @@ var ko_KR map[string]string = map[string]string{
 	"config.debug_port.invalid":      "올바르지 않은 JVM 디버깅 포트 설정을 발견하였습니다. 구성 설정 파일을 확인해주세요.",
 	"config.api_port.invalid":        "올바르지 않은 API 포트 설정을 발견하였습니다. 구성 설정 파일을 확인해주세요.",
 	"config.plugin_api_port.invalid": "올바르지 않은 플러그인 API 포트 설정을 발견하였습니다. 구성 설정 파일을 확인해주세요.",
+
+	// 업데이터
+	"updater.checking":                 "업데이트 확인중...",
+	"updater.up.to.date":               "최신 버전 입니다!",
+	"updater.new.version.found":        "새로운 버전을 발견하였습니다! 업데이트중...",
+	"updater.update.failed":            "업데이트를 하던 중 오류가 발생했습니다. 자세한 오류 내용은 다음과 같습니다: $error",
+	"updater.update.success":           "성공적으로 v.$version 버전으로 업데이트 하였습니다!",
+	"updater.restart.to.apply":         "재시작 하여 업데이트를 적용해주세요.",
+	"updater.version.fetch.failed":     "최신 버전을 불러올 수 없습니다. 자세한 오류 내용은 다음과 같습니다: $error",
+	"updater.executable.path.notfound": "실행 파일 경로를 찾을 수 없습니다.",
 }

@@ -17,6 +17,7 @@ import (
 	"github.com/MC-Dashify/launcher/i18n"
 	"github.com/MC-Dashify/launcher/rest"
 	"github.com/MC-Dashify/launcher/traffic"
+	"github.com/MC-Dashify/launcher/updater"
 	"github.com/MC-Dashify/launcher/utils"
 	"github.com/MC-Dashify/launcher/utils/logger"
 	"github.com/MC-Dashify/launcher/webconsole"
@@ -100,6 +101,9 @@ func main() {
 
 func runner() {
 	config.ConfigContent = config.LoadConfig()
+	if config.ConfigContent.AutoUpdate {
+		updater.ConfirmAndSelfUpdate()
+	}
 
 	if config.ConfigContent.EnableTrafficMonitor {
 		logger.Info(strings.ReplaceAll(i18n.Get("traffic.monitor.enabled"), "$redirectPort", fmt.Sprint(config.ConfigContent.TrafficRedirectPort)))
