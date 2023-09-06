@@ -211,10 +211,8 @@ func runner() {
 	runtimeArgs := prepareRuntime(runtimeJar{}, config.ConfigContent)
 
 	customArgs := append(append(runtimeArgs.arguments, "-jar"), runtimeArgs.serverFile)
+	customArgs = append(customArgs, config.ConfigContent.JarArgs...)
 
-	for _, customArg := range config.ConfigContent.JarArgs {
-		customArgs = append(customArgs, customArg)
-	}
 	global.JarArgs = customArgs
 	startServer(customArgs)
 
@@ -349,8 +347,7 @@ Loop:
 
 func prepareRuntime(runtime runtimeJar, config config.Config) runtimeJar {
 	runtime = runtimeJar{serverFile: serverFilePath}
-
-	for _, option := range []string{
+	runtime.arguments = append(runtime.arguments, []string{
 		fmt.Sprintf("-Xmx%dG", config.Memory),
 		fmt.Sprintf("-Xms%dG", config.Memory),
 		"-XX:+ParallelRefProcEnabled",
@@ -368,12 +365,8 @@ func prepareRuntime(runtime runtimeJar, config config.Config) runtimeJar {
 		"-Dusing.aikars.flags=https://mcflags.emc.gs",
 		"-Daikars.new.flags=true",
 		"-Dcom.mojang.eula.agree=true",
-	} {
-		runtime.arguments = append(runtime.arguments, option)
-	}
-	for _, option := range utils.SelectOptionByMemory(config.Memory) {
-		runtime.arguments = append(runtime.arguments, option)
-	}
+	}...)
+	runtime.arguments = append(runtime.arguments, utils.SelectOptionByMemory(config.Memory)...)
 
 	if config.Debug {
 		debugOption := "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address="
