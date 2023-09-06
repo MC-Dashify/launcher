@@ -73,6 +73,32 @@ func init() {
 }
 
 func main() {
+	runner()
+	for {
+		if !global.NormalStatusExit {
+			logger.Fatal(i18n.Get("general.server.crashed"))
+		}
+
+		if !global.IsMCServerRunning {
+			if config.ConfigContent.Restart {
+				webconsole.Server.Shutdown(context.Background())
+				logger.Info(i18n.Get("general.server.restart"))
+				fmt.Print("> ")
+				time.Sleep(5 * time.Second)
+				fmt.Print("\n")
+				config.ConfigContent = config.LoadConfig()
+				runner()
+			} else {
+				logger.Info(i18n.Get("general.exiting"))
+				webconsole.Server.Shutdown(context.Background())
+				os.Exit(0)
+			}
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+}
+
+func runner() {
 	config.ConfigContent = config.LoadConfig()
 
 	if config.ConfigContent.EnableTrafficMonitor {
@@ -144,31 +170,6 @@ func main() {
 
 	config.GetPluginConfig()
 
-	runner()
-	for {
-		if !global.NormalStatusExit {
-			logger.Fatal(i18n.Get("general.server.crashed"))
-		}
-
-		if !global.IsMCServerRunning {
-			if config.ConfigContent.Restart {
-				logger.Info(i18n.Get("general.server.restart"))
-				fmt.Print("> ")
-				time.Sleep(5 * time.Second)
-				webconsole.IsRestart = true
-				fmt.Print("\n")
-				runner()
-			} else {
-				logger.Info(i18n.Get("general.exiting"))
-				webconsole.Server.Shutdown(context.Background())
-				os.Exit(0)
-			}
-		}
-		time.Sleep(100 * time.Millisecond)
-	}
-}
-
-func runner() {
 	javaFlavour, javaVersion := utils.CheckJava()
 	logger.Info(strings.ReplaceAll(strings.ReplaceAll(i18n.Get("java.detected"), "$javaFlavour", javaFlavour), "$javaVersion", javaVersion))
 
@@ -209,7 +210,6 @@ func runner() {
 	}
 
 	runtimeArgs := prepareRuntime(runtimeJar{}, config.ConfigContent)
-
 	customArgs := append(append(runtimeArgs.arguments, "-jar"), runtimeArgs.serverFile)
 	customArgs = append(customArgs, config.ConfigContent.JarArgs...)
 
