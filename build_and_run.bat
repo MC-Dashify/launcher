@@ -6,4 +6,5 @@ echo Building...
 go build -o .server/launcher.exe
 cd .server
 echo Running...
-launcher.exe --verbose
+launcher.exe
+@REM launcher.exe --verbose

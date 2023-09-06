@@ -6,6 +6,7 @@ import (
 	"net/http/httputil"
 
 	"github.com/MC-Dashify/launcher/config"
+	"github.com/MC-Dashify/launcher/utils/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +22,11 @@ func ReverseProxy() gin.HandlerFunc {
 			// // Golang camelcases headers
 			// delete(req.Header, "My-Header")
 		}
-		proxy := &httputil.ReverseProxy{Director: director}
+		proxy := &httputil.ReverseProxy{
+			Director: director, ErrorHandler: func(_ http.ResponseWriter, r *http.Request, err error) {
+				logger.Debug(fmt.Sprintf("%+v", err))
+			},
+		}
 		proxy.ServeHTTP(c.Writer, c.Request)
 	}
 }
