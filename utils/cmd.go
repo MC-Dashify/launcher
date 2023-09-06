@@ -24,26 +24,22 @@ func SelectOptionByMemory(memory int) []string {
 	memoryOptions := []string{"-Dfile.encoding=UTF-8", "--add-modules=jdk.incubator.vector"}
 	if memory >= 12 {
 		logger.Info("Using Aikar's Advanced memory options")
-		for _, option := range []string{
+		memoryOptions = append(memoryOptions, []string{
 			"-XX:G1NewSizePercent=40",
 			"-XX:G1MaxNewSizePercent=50",
 			"-XX:G1HeapRegionSize=16M",
 			"-XX:G1ReservePercent=15",
 			"-XX:InitiatingHeapOccupancyPercent=20",
-		} {
-			memoryOptions = append(memoryOptions, option)
-		}
+		}...)
 	} else {
 		logger.Info("Using Aikar's standard memory options")
-		for _, option := range []string{
+		memoryOptions = append(memoryOptions, []string{
 			"-XX:G1NewSizePercent=30",
 			"-XX:G1MaxNewSizePercent=40",
 			"-XX:G1HeapRegionSize=8M",
 			"-XX:G1ReservePercent=20",
 			"-XX:InitiatingHeapOccupancyPercent=15",
-		} {
-			memoryOptions = append(memoryOptions, option)
-		}
+		}...)
 	}
 	return memoryOptions
 }
