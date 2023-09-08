@@ -40,7 +40,7 @@ func Logs(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Lines query too large"})
 		return
 	}
-	if lines < 0 {
+	if lines < 1 {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Lines query too small"})
 		return
 	}
