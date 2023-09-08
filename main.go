@@ -154,6 +154,7 @@ func runner() {
 	router.GET("/ping", rest.Ping)
 	router.GET("/logs", rest.Logs)
 	router.GET("/traffic", rest.Traffic)
+	router.GET("/files/*any", rest.GETFiles)
 
 	router.GET("/", rest.ReverseProxy())
 	router.GET("/worlds", rest.ReverseProxy())
@@ -219,8 +220,6 @@ func runner() {
 
 	global.JarArgs = customArgs
 	startServer(customArgs)
-
-	// <-done
 }
 
 func startServer(customArgs []string) {
