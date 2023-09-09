@@ -65,11 +65,7 @@ func GETFiles(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "content": dirStatus, "path": fsPath})
 	} else {
-		_fileContent, err := os.ReadFile(_targetFilePath)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "path": fsPath})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"status": "ok", "content": string(_fileContent), "path": fsPath})
+		c.Status(http.StatusOK)
+		c.File(_targetFilePath)
 	}
 }
