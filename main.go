@@ -155,6 +155,7 @@ func runner() {
 	router.GET("/logs", rest.Logs)
 	router.GET("/traffic", rest.Traffic)
 	router.GET("/files/*any", rest.GETFiles)
+	router.PUT("/files/*any", rest.PUTFiles)
 	router.POST("/files/*any", rest.POSTFiles)
 	router.PATCH("/files/*any", rest.PATCHFiles)
 	router.DELETE("/files/*any", rest.DELETEFiles)

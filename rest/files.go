@@ -175,6 +175,63 @@ func PATCHFiles(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "path": strings.Replace(fsPath, ".", "", 1)})
 }
 
+type MoveFile struct {
+	MoveTo string
+}
+
+func PUTFiles(c *gin.Context) {
+	var err error
+	requestURL := c.Request.URL.Path
+	originalFilePath := strings.Replace(requestURL, "/files", ".", 1)
+	var moveFilePathObject MoveFile
+
+	if err := c.BindJSON(&moveFilePathObject); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "failed", "detail": err.Error(), "path": originalFilePath})
+	}
+
+	_executablePath, err := os.Executable()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "path": originalFilePath})
+		return
+	}
+	_absOriginalFSPath := filepath.Join(filepath.Dir(_executablePath), originalFilePath)
+	_absMoveFSPath := filepath.Join(filepath.Dir(_executablePath), moveFilePathObject.MoveTo)
+
+	// first, check if the requested path is in the root directory
+	_rootDirPath := filepath.Dir(_executablePath)
+	_targetFilePath := _absOriginalFSPath
+	_targetMoveFilePath := _absMoveFSPath
+
+	if !strings.HasPrefix(_targetFilePath, _rootDirPath) || !strings.HasPrefix(_targetMoveFilePath, _rootDirPath) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "failed", "detail": "cannot modify file outside of server.", "path": originalFilePath})
+		return
+	}
+
+	if filepath.ToSlash(_executablePath) == filepath.ToSlash(_targetFilePath) || filepath.ToSlash(_executablePath) == filepath.ToSlash(_targetMoveFilePath) {
+		c.JSON(http.StatusNotAcceptable, gin.H{"status": "failed", "detail": "cannot read launcher itself.", "path": originalFilePath})
+		return
+	}
+
+	// then, check if the requested path is exists
+	if _, err := os.Stat(_targetFilePath); os.IsNotExist(err) {
+		c.JSON(http.StatusNotFound, gin.H{"status": "failed", "detail": err.Error(), "path": originalFilePath})
+		return
+	}
+	if _, err := os.Stat(_targetMoveFilePath); os.IsExist(err) {
+		c.JSON(http.StatusConflict, gin.H{"status": "failed", "detail": err.Error(), "path": moveFilePathObject.MoveTo})
+		return
+	}
+
+	err = os.Rename(_absOriginalFSPath, _absMoveFSPath)
+	if err != nil {
+		// c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "origin_path": strings.Replace(originalFilePath, ".", "", 1), "moved_path": moveFilePathObject.MoveTo})
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "origin_path": originalFilePath, "moved_path": moveFilePathObject.MoveTo})
+		return
+	}
+	// c.JSON(http.StatusOK, gin.H{"status": "ok", "origin_path": strings.Replace(originalFilePath, ".", "", 1), "moved_path": moveFilePathObject.MoveTo})
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "origin_path": originalFilePath, "moved_path": moveFilePathObject.MoveTo})
+}
+
 func DELETEFiles(c *gin.Context) {
 	var err error
 	requestURL := c.Request.URL.Path
