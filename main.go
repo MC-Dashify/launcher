@@ -155,6 +155,7 @@ func runner() {
 	router.GET("/logs", rest.Logs)
 	router.GET("/traffic", rest.Traffic)
 	router.GET("/files/*any", rest.GETFiles)
+	router.DELETE("/files/*any", rest.DELETEFiles)
 
 	router.GET("/", rest.ReverseProxy())
 	router.GET("/worlds", rest.ReverseProxy())
