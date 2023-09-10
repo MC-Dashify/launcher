@@ -124,6 +124,57 @@ func POSTFiles(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "path": strings.Replace(fsPath, ".", "", 1)})
 }
+
+func PATCHFiles(c *gin.Context) {
+	var err error
+	requestURL := c.Request.URL.Path
+	fsPath := strings.Replace(requestURL, "/files", ".", 1)
+	_executablePath, err := os.Executable()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+	_absFSPath := filepath.Join(filepath.Dir(_executablePath), fsPath)
+
+	// first, check if the requested path is in the root directory
+	_rootDirPath := filepath.Dir(_executablePath)
+	_targetFilePath := _absFSPath
+
+	if !strings.HasPrefix(_targetFilePath, _rootDirPath) {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "failed", "detail": "cannot modify file outside of server.", "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+
+	if filepath.ToSlash(_executablePath) == filepath.ToSlash(_targetFilePath) {
+		c.JSON(http.StatusNotAcceptable, gin.H{"status": "failed", "detail": "cannot read launcher itself.", "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+
+	// then, check if the requested path is exists
+	if _, err := os.Stat(_targetFilePath); os.IsNotExist(err) {
+		c.JSON(http.StatusNotFound, gin.H{"status": "failed", "detail": err.Error(), "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+
+	if file.Size < 1 {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "failed", "detail": "No files uploaded.", "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+
+	err = c.SaveUploadedFile(file, _targetFilePath)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "failed", "detail": err.Error(), "path": strings.Replace(fsPath, ".", "", 1)})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "path": strings.Replace(fsPath, ".", "", 1)})
+}
+
 func DELETEFiles(c *gin.Context) {
 	var err error
 	requestURL := c.Request.URL.Path
