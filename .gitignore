@@ -1,4 +1,5 @@
 launcher.exe
 launcher.conf.json
 .server
+.server - 복사본
 .env/sentryDSN
