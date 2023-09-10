@@ -34,7 +34,7 @@ func GETFiles(c *gin.Context) {
 	}
 
 	if filepath.ToSlash(_executablePath) == filepath.ToSlash(_targetFilePath) {
-		c.JSON(http.StatusNotAcceptable, gin.H{"status": "failed", "detail": "cannot modify launcher itself.", "path": fsPath})
+		c.JSON(http.StatusNotAcceptable, gin.H{"status": "failed", "detail": "cannot read launcher itself.", "path": fsPath})
 		return
 	}
 
