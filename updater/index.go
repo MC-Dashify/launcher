@@ -20,7 +20,7 @@ func ConfirmAndSelfUpdate() {
 		return
 	}
 
-	v := semver.MustParse(global.VERSION)
+	v := semver.MustParse(strings.TrimSpace(global.VERSION))
 	if !found || latest.Version.LTE(v) {
 		logger.Info(fmt.Sprintf("[Updater] %+v", i18n.Get("updater.up.to.date")))
 		return
